@@ -14,11 +14,11 @@ export default class CreateGame extends React.Component {
   createGame() {
     const name = this.state.name;
     const rounds = parseInt(this.state.rounds)
-    if (name.length === 0 || !(name).match(/^[a-zA-Z\-]+$/)) {
+    if (name.length === 0 || !name.match(/^[a-zA-Z\-]+$/)) {
       alert("You must enter a valid name!"); return;
 
     }
-    // name and # of rounds to play
+    this.props.startplayer1(name, rounds)
   }
 
   render() {

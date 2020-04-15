@@ -5,17 +5,17 @@ export default class JoinGame extends React.Component {
         super(props);
         this.state = {
             name: '',
-            room: ''
+            room: 'A'
         }
         this.joinGame = this.joinGame.bind(this)
     }
     joinGame() {
         const name = this.state.name;
-        const room = parseInt(this.state.room)
-        if (name.length === 0 || !(name).match(/^[a-zA-Z\-]+$/)) {
+        const room = this.state.room
+        if (name.length === 0 || !name.match(/^[a-zA-Z\-]+$/)) {
             alert("You must enter a valid name!"); return;
-
         }
+        this.props.startplayer2(name, room)
     }
 
     render() {
@@ -34,8 +34,20 @@ export default class JoinGame extends React.Component {
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                             </div>
 
-                            <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Room' className='form-control' required />
-
+                            <div className="form-group">
+                                <select onChange={(e) => this.setState({ rounds: e.target.value })} className="form-control">
+                                    <option value='A'>A</option>
+                                    <option value='B'>B</option>
+                                    <option value='C'>C</option>
+                                    <option value='D'>D</option>
+                                    <option value='E'>E</option>
+                                    <option value='F'>F</option>
+                                    <option value='G'>G</option>
+                                    <option value='H'>H</option>
+                                    <option value='I'>I</option>
+                                    <option value='J'>J</option>
+                                </select>
+                            </div>
 
                             <input onChange={(e) => this.setState({ name: e.target.value })} type='text' placeholder='Enter your name' className='form-control' required />
 

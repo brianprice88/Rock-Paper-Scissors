@@ -12,9 +12,13 @@ export default class Lobby extends React.Component {
             visible: false,
         }
     }
-
+    
     componentDidMount() {
-        setInterval(() => this.setState({ visible: !this.state.visible }), 2000)
+      this.thumbInterval = setInterval(() => this.setState({ visible: !this.state.visible }), 2000)   
+    }
+
+    componentWillUnmount() {
+     clearInterval(this.thumbInterval)    
     }
 
     render() {
@@ -24,10 +28,10 @@ export default class Lobby extends React.Component {
                 <div className="container-fluid">
                     <div className='row'>
                         <div className='col'>
-                            <CreateGame />
+                            <CreateGame startplayer1 = {this.props.startplayer1}/>
                         </div>
                         <div className='col'>
-                            <JoinGame />
+                            <JoinGame startplayer2 = {this.props.startplayer2}/>
                         </div>
                     </div>
                 </div>

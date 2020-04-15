@@ -1,7 +1,6 @@
 import React from 'react';
 
 const Topbar = () => {
-    const colors = ['red', 'blue', 'yellow', 'black', 'orange', 'pink', 'snow']
     const rock = <i className="far fa-hand-rock" style={{ fontSize: "36px"}}></i>
     const rock2 = <i className="fas fa-hand-rock" style={{ fontSize: "36px"}}></i>
     const paper = <i className="far fa-hand-paper" style={{ fontSize: '36px'}}></i>

@@ -81,3 +81,30 @@ div.arm {
 .scissorsFinger-2 { top: 78px; left: 84px; --dif: 4px; width: 130px; transform:rotate(5deg);}
 .scissorsFinger-3 { top: 106px; --dif: 0px; }
 .scissorsFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }
+
+
+.lefthandlobby {
+float: left;
+opacity: 1;
+transform: translateX(0%) scale(1);
+transition: all .75s;
+}
+
+.righthandlobby {
+ float: right ;
+ opacity: 1;
+ transform: translateX(0%) scale(1);
+ transition: all .75s;
+}
+
+.lefthandlobbyinvisible {
+  transform: translateX(-30%) scale(0.95);
+  opacity: 0;
+  transition: all .75s;
+}
+
+.righthandlobbyinvisible {
+  transform: translateX(30%) scale(0.95);
+  opacity: 0;
+  transition: all .75s;
+}

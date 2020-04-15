@@ -2,23 +2,20 @@ import React from 'react';
 import Topbar from './Topbar.js';
 import Lobby from './Lobby.js'
 
-class App extends React.Component {
+export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      createGame: false,
-      joinGame: false,
+      startGame: false,
     }
   }
   render() {
     return (
       <>
        <Topbar />  
-        {!this.state.createGame && !this.state.joinGame ? <Lobby />: null}
+        {!this.state.startGame ? <Lobby />: null}
       </>
 
     )
   }
 }
-
-export default App;

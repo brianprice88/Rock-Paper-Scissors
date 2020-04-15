@@ -1,13 +1,15 @@
 import React from 'react';
+import CreateGame from './CreateGame.js';
+import JoinGame from './JoinGame.js';
 import images from '../images/images.js';
 import '../images/images.css';
 import '../App.css'
 
-class Lobby extends React.Component {
+export default class Lobby extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            visible: false
+            visible: false,
         }
     }
 
@@ -19,18 +21,16 @@ class Lobby extends React.Component {
 
         return (
             <>
-
                 <div className="container-fluid">
                     <div className='row'>
                         <div className='col'>
-                            <button type="button" className="btn btn-primary btn-block"><strong>Create new game</strong></button>
+                            <CreateGame />
                         </div>
                         <div className='col'>
-                            <button type="button" className="btn btn-primary btn-block"><strong>Join existing game</strong></button>
+                            <JoinGame />
                         </div>
                     </div>
                 </div>
-
 
                 <div className="container p-3" >
                     <div className='row'>
@@ -73,5 +73,3 @@ class Lobby extends React.Component {
         )
     }
 }
-
-export default Lobby

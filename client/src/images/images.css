@@ -1,12 +1,3 @@
-
-
-@import url('https://fonts.googleapis.com/css?family=Acme&display=swap');
-
-@keyframes changeOrder {
-  from { z-index: 9;}
-  to { z-index: 1; }
-}
-
 @keyframes handShake {
   0%,100% { transform: rotate(10deg); }
   50% { transform: rotate(-10deg); }
@@ -17,24 +8,20 @@
   50% { transform: rotateY(180deg) rotate(-10deg); }
 }
 
-
-#hands {
-  text-align: center;
-}
-
-input:checked ~ div .hand {
-  animation: none !important;
-}
-
 .hand {
   margin: 20px;
   width: 200px;
   height: 200px;
   position: relative;
-  transform: rotate(10deg);
   display: inline-block;
-  animation: handShake 2s infinite;
+  /* animation: handShake 2s infinite; */
 }
+
+#right-hand {
+    transform: rotateY(180deg);
+    /* animation: handShake2 2s infinite; */
+    position: relative;
+  }
 
 .hand > div {
   position: absolute;
@@ -60,15 +47,9 @@ input:checked ~ div .hand {
   transform-origin: 0 50%;
 }
 
-.finger-1 { top: 50px; --dif: 0px; }
-.finger-2 { top: 78px; left: 84px; --dif: 4px; }
-.finger-3 { top: 106px; --dif: 0px; }
-.finger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }
-
 div.thumb {
   width: 35px;
   height: 70px;
-  
   border-radius: 0 20px 20px 20px;
   top: 50px;
   left: 80px;
@@ -77,56 +58,26 @@ div.thumb {
 }
 
 div.arm {
-  width: 22px;
+  width: 52px;
   height: 70px;
-  left: 20px;
+  left: -10px;
   top: 70px;
   border: 0;
   border-top: 2px solid black;
   border-bottom: 2px solid black;
 }
 
-#user-hand {
-  transform: rotateY(180deg);
-  animation: handShake2 2s infinite;
-  position: relative;
-}
+.rockFinger-1 { top: 50px; --dif: 0px; }
+.rockFinger-2 { top: 78px; left: 84px; --dif: 4px; }
+.rockFinger-3 { top: 106px; --dif: 0px; }
+.rockFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }
 
-input[type="radio"] {
-  position: absolute;
-  top: -1000in;
-  left: -1000in;
-}
+.paperFinger-1 { top: 50px; --dif: 0px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
+.paperFinger-2 { top: 78px; left: 84px; --dif: 4px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
+.paperFinger-3 { top: 106px; --dif: 0px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0; }
+.paperFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
 
-input[id$="scissors"]:checked ~ div #user-hand .finger-1,
-input[id^="scissors"]:checked ~ div #computer-hand .finger-1 {
-  width: 130px;
-  transform:rotate(-5deg);
-}
-
-input[id$="scissors"]:checked ~ div #user-hand .finger-2,
-input[id^="scissors"]:checked ~ div #computer-hand .finger-2 {
-  width: 130px;
-  transform:rotate(5deg);
-}
-
-input[id$="paper"]:checked ~ div #user-hand .finger-1,
-input[id$="paper"]:checked ~ div #user-hand .finger-2,
-input[id$="paper"]:checked ~ div #user-hand .finger-3,
-input[id$="paper"]:checked ~ div #user-hand .finger-4,
-input[id^="paper"]:checked ~ div #computer-hand .finger-1,
-input[id^="paper"]:checked ~ div #computer-hand .finger-2,
-input[id^="paper"]:checked ~ div #computer-hand .finger-3,
-input[id^="paper"]:checked ~ div #computer-hand .finger-4 {
-  left: 124px;
-  left: calc(124px + var(--dif));
-  width: 80px;
-  border-left: 0;
-  border-radius: 0 20px 20px 0;
-}
-
-#hands {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+.scissorsFinger-1 { top: 50px; --dif: 0px; width: 130px; transform:rotate(-5deg);}
+.scissorsFinger-2 { top: 78px; left: 84px; --dif: 4px; width: 130px; transform:rotate(5deg);}
+.scissorsFinger-3 { top: 106px; --dif: 0px; }
+.scissorsFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }

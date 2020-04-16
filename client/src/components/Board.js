@@ -5,7 +5,6 @@ export default class Board extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
         }
     }
 
@@ -30,6 +29,16 @@ export default class Board extends React.Component {
                             <span>&times;</span>
                         </button>
                     </div>
+                }
+
+                {this.props.makingSelection ?
+                    <div className="btn-group" role="group">
+                        <h4>Make your choice:</h4>
+                        <button type="button" className="btn btn-secondary gameBtn">Rock</button>
+                        <button type="button" className="btn btn-secondary gameBtn">Paper</button>
+                        <button type="button" className="btn btn-secondary gameBtn">Scissors</button>
+                    </div>
+                    : null
                 }
 
             </>

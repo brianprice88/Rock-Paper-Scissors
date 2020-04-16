@@ -35,7 +35,7 @@ io.on('connection', function (socket) {
             }
             users[id] = room;
             socket.join(room)
-            socket.emit('player1', { name, room, rounds })
+            socket.emit('player1', { name, room, rounds }) //player 1 has joined
         }
     })
 
@@ -50,8 +50,9 @@ io.on('connection', function (socket) {
             var opponent = rooms[room].player1
             users[id] = room;
             socket.join(data.room);
-            socket.emit('player2', { name, room, rounds, opponent })
-            socket.to(room).emit('player2joined', {name})
+            socket.emit('player2', { name, room, rounds, opponent }) // player 2 has joined
+            socket.to(room).emit('player2joined', {name}) // notify player 1
+            io.in(room).emit('startGame', {name, opponent}) // start the game
         }
         else if (!room) {
             socket.emit('player2', { message: 'Sorry, that room does not exist!' });
@@ -65,6 +66,7 @@ io.on('connection', function (socket) {
         var leftRoom = users[id];
         delete users[id];
         if (rooms[leftRoom]) {
+            socket.to(leftRoom).emit('playerLeft')
             rooms[leftRoom].players--
             if (rooms[leftRoom].players === 0) {
                 delete rooms[leftRoom]

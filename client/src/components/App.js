@@ -17,29 +17,32 @@ export default class App extends React.Component {
       isPlayer2: false,
       player1score: 0,
       player2score: 0,
-      opponent: ''
+      opponent: '',
+      showOptions: false
     }
     this.beginGamePlayer1 = this.beginGamePlayer1.bind(this);
     this.beginGamePlayer2 = this.beginGamePlayer2.bind(this);
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
-    this.player2joined = this.player2joined.bind(this)
+    this.player2joined = this.player2joined.bind(this);
+    this.opponentLeft = this.opponentLeft.bind(this);
+    this.showOptions = this.showOptions.bind(this)
   }
 
-  beginGamePlayer1(name, rounds, room) {
+  beginGamePlayer1(name, rounds, room) { // player 1 wants to create a room
     socket.emit('createGame', { name, rounds, room })
   }
 
-  beginGamePlayer2(name, room) {
+  beginGamePlayer2(name, room) { // player 2 wants to join a room
     socket.emit('joinGame', { name, room })
   }
 
-  joinRoomPlayer1(data) {
+  joinRoomPlayer1(data) { //player 1 creates and joins room
     if (data.message) {
       alert(data.message)
       return;
     }
-    alert(`Your room name is ${data.room}.  Please notify other player to join this room.`)
+    alert(`Room ${data.room} successfully created.  Please notify other player to join.`)
     this.setState({
       isPlaying: true,
       name: data.name,
@@ -49,12 +52,12 @@ export default class App extends React.Component {
     })
   }
 
-  joinRoomPlayer2(data) {
+  joinRoomPlayer2(data) { //player 2 joins room
     if (data.message) {
       alert(data.message)
       return;
     }
-    alert(`Welcome!  Game will begin shortly`)
+    alert(`Room ${data.room} entered successfully!  The game is starting.`)
     this.setState({
       isPlaying: true,
       name: data.name,
@@ -65,11 +68,22 @@ export default class App extends React.Component {
     })
   }
 
-  player2joined(data) {
-    alert(`${data.name} joined!`)
+  player2joined(data) { //player1 is informed that player 2 has joined
+    alert(`${data.name} joined the room!`)
     this.setState({
-      opponent: data.name
+      opponent: data.name,
     })
+  }
+
+  opponentLeft() { //player1 finds out player 2 quit
+    alert('Your opponent left!')
+    this.setState({
+      opponent: null,
+    })
+  }
+
+  showOptions() {
+    this.setState({showOptions: true})
   }
 
   componentDidMount() {
@@ -78,9 +92,9 @@ export default class App extends React.Component {
     socket.on('player2', this.joinRoomPlayer2)
     socket.on('player2joined', this.player2joined)
 
-    socket.on('startGame', function (data) {
-      console.log(`${data.name} has entered the room!`)
-    })
+    socket.on('startGame', this.showOptions)
+    
+    socket.on('playerLeft', this.opponentLeft)
   }
 
 
@@ -101,7 +115,7 @@ export default class App extends React.Component {
             player1score={this.state.player1score}
             player2score={this.state.player2score}
             opponent={this.state.opponent}
-
+            makingSelection={this.state.showOptions}
           />}
       </>
 

@@ -28,20 +28,29 @@ io.on('connection', function (socket) {
         if (rooms[room]) {
             socket.emit('player1', { message: 'Sorry, that room name is already taken!' });
         } else {
-            rooms[room] = 1;
+            rooms[room] = {
+                players: 1,
+                rounds: rounds,
+                player1: name
+            }
             users[id] = room;
             socket.join(room)
-            socket.emit('player1', { name, rounds, room })
+            socket.emit('player1', { name, room, rounds })
         }
     })
 
     socket.on('joinGame', function (data) {
-        var room = io.nsps['/'].adapter.rooms[data.room]
-        if (room && room.length === 1) {
-            rooms[room] = 2
+        var name = data.name
+        var room = data.room
+        var roomName = io.nsps['/'].adapter.rooms[room]
+        if (roomName && roomName.length === 1) {
+            rooms[room].players = 2
+            rooms[room].player2 = name
+            var rounds = rooms[room].rounds
+            users[id] = room;
             socket.join(data.room);
-            // socket.broadcast.to(data.room).emit('player1', {});
-            socket.emit('player2', { name: data.name, room: data.room })
+            socket.broadcast.to(data.room).emit('startGame', { name: data.name });
+            socket.emit('player2', { name, room, rounds })
         }
         else if (!room) {
             socket.emit('player2', { message: 'Sorry, that room does not exist!' });
@@ -54,8 +63,12 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () { //delete the room if it's empty
         var leftRoom = users[id];
         delete users[id];
-        rooms[leftRoom]--;
-        if (rooms[leftRoom] === 0) { delete rooms[leftRoom] }
+        if (rooms[leftRoom]) {
+            rooms[leftRoom].players--
+            if (rooms[leftRoom].players === 0) {
+                delete rooms[leftRoom]
+            }
+        }
         console.log(`A user disconnected: current user count is ${Object.keys(users).length}`)
     })
 

@@ -15,7 +15,7 @@ export default class Board extends React.Component {
                 <Score
                     player1score={this.props.player1score}
                     player2score={this.props.player2score}
-                    rounds={this.props.rounds}
+                    toWin={this.props.toWin}
                     name={this.props.name}
                     room={this.props.room}
                     isPlayer1={this.props.isPlayer1}
@@ -31,6 +31,8 @@ export default class Board extends React.Component {
                     </div>
                 }
 
+
+{/* user picks from buttons -> whichever they click should fire function to App which notifies socket, which either tells them other player hasn't selected or figures out who wins/ties */}
                 {this.props.makingSelection ?
                     <div className="btn-group" role="group">
                         <h4>Make your choice:</h4>
@@ -40,13 +42,7 @@ export default class Board extends React.Component {
                     </div>
                     : null
                 }
-
             </>
-
-
-
-
-
         )
     }
 }

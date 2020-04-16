@@ -12,7 +12,7 @@ export default class App extends React.Component {
       isPlaying: false,
       name: '',
       room: '',
-      rounds: 1,
+      toWin: 1,
       isPlayer1: false,
       isPlayer2: false,
       player1score: 0,
@@ -20,17 +20,16 @@ export default class App extends React.Component {
       opponent: '',
       showOptions: false
     }
-    this.beginGamePlayer1 = this.beginGamePlayer1.bind(this);
-    this.beginGamePlayer2 = this.beginGamePlayer2.bind(this);
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
     this.player2joined = this.player2joined.bind(this);
     this.opponentLeft = this.opponentLeft.bind(this);
-    this.showOptions = this.showOptions.bind(this)
+    this.showOptions = this.showOptions.bind(this);
+    this.showError = this.showError.bind(this)
   }
 
-  beginGamePlayer1(name, rounds, room) { // player 1 wants to create a room
-    socket.emit('createGame', { name, rounds, room })
+  beginGamePlayer1(name, toWin, room) { // player 1 wants to create a room
+    socket.emit('createGame', { name, toWin, room })
   }
 
   beginGamePlayer2(name, room) { // player 2 wants to join a room
@@ -38,31 +37,23 @@ export default class App extends React.Component {
   }
 
   joinRoomPlayer1(data) { //player 1 creates and joins room
-    if (data.message) {
-      alert(data.message)
-      return;
-    }
     alert(`Room ${data.room} successfully created.  Please notify other player to join.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
-      rounds: data.rounds,
+      toWin: data.toWin,
       isPlayer1: true
     })
   }
 
   joinRoomPlayer2(data) { //player 2 joins room
-    if (data.message) {
-      alert(data.message)
-      return;
-    }
     alert(`Room ${data.room} entered successfully!  The game is starting.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
-      rounds: data.rounds,
+      toWin: data.toWin,
       isPlayer2: true,
       opponent: data.opponent
     })
@@ -82,8 +73,13 @@ export default class App extends React.Component {
     })
   }
 
-  showOptions() {
+  showOptions() { //let player pick rock/paper/scissors for this round
     this.setState({showOptions: true})
+  }
+
+  showError(data) { //display error messages
+    alert(data.message)
+    return;
   }
 
   componentDidMount() {
@@ -95,6 +91,7 @@ export default class App extends React.Component {
     socket.on('startGame', this.showOptions)
     
     socket.on('playerLeft', this.opponentLeft)
+    socket.on('err', this.showError)
   }
 
 
@@ -104,12 +101,12 @@ export default class App extends React.Component {
         <Topbar />
         {!this.state.isPlaying ?
           <Lobby
-            startplayer1={this.beginGamePlayer1} startplayer2={this.beginGamePlayer2}
+            startplayer1={this.beginGamePlayer1.bind(this)} startplayer2={this.beginGamePlayer2.bind(this)}
           />
           : <Board
             name={this.state.name}
             room={this.state.room}
-            rounds={this.state.rounds}
+            toWin={this.state.toWin}
             isPlayer1={this.state.isPlayer1}
             isPlayer2={this.state.isPlayer2}
             player1score={this.state.player1score}

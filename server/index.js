@@ -23,19 +23,19 @@ io.on('connection', function (socket) {
 
     socket.on('createGame', function (data) {
         var name = data.name;
-        var rounds = data.rounds;
+        var toWin = data.toWin;
         var room = data.room;
         if (rooms[room]) {
-            socket.emit('player1', { message: 'Sorry, that room name is already taken!' });
+            socket.emit('err', { message: 'Sorry, that room name is already taken!' });
         } else {
             rooms[room] = {
                 players: 1,
-                rounds: rounds,
-                player1: name
+                toWin: toWin,
+                player1: name,
             }
             users[id] = room;
             socket.join(room)
-            socket.emit('player1', { name, room, rounds }) //player 1 has joined
+            socket.emit('player1', { name, room, toWin }) //player 1 has joined
         }
     })
 
@@ -46,19 +46,19 @@ io.on('connection', function (socket) {
         if (roomName && roomName.length === 1) {
             rooms[room].players = 2
             rooms[room].player2 = name
-            var rounds = rooms[room].rounds
+            var toWin = rooms[room].toWin
             var opponent = rooms[room].player1
             users[id] = room;
             socket.join(data.room);
-            socket.emit('player2', { name, room, rounds, opponent }) // player 2 has joined
+            socket.emit('player2', { name, room, toWin, opponent }) // player 2 has joined
             socket.to(room).emit('player2joined', {name}) // notify player 1
             io.in(room).emit('startGame', {name, opponent}) // start the game
         }
-        else if (!room) {
-            socket.emit('player2', { message: 'Sorry, that room does not exist!' });
+        else if (!roomName) {
+            socket.emit('err', { message: 'Sorry, that room does not exist!' });
         }
-        else if (room.length > 1) {
-            socket.emit('player2', { message: 'Sorry, that room is full!' });
+        else if (roomName.length > 1) {
+            socket.emit('err', { message: 'Sorry, that room is full!' });
         }
     });
 

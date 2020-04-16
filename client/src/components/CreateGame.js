@@ -5,7 +5,7 @@ export default class CreateGame extends React.Component {
     super(props);
     this.state = {
       name: '',
-      rounds: 1,
+      toWin: 1,
       room: ''
 
     }
@@ -14,7 +14,7 @@ export default class CreateGame extends React.Component {
 
   createGame() {
     const name = this.state.name;
-    const rounds = parseInt(this.state.rounds);
+    const toWin = parseInt(this.state.toWin);
     const room = this.state.room;
     if (name.length === 0 || !name.match(/^[a-zA-Z]+$/)) {
       alert("You must enter a valid name!"); return;
@@ -22,7 +22,7 @@ export default class CreateGame extends React.Component {
     if (room.length === 0 || !room.match(/^[a-zA-Z]+$/)) {
       alert("You must enter a valid room name!"); return;
     }
-    this.props.startplayer1(name, rounds, room)
+    this.props.startplayer1(name, toWin, room)
   }
 
   render() {
@@ -38,12 +38,12 @@ export default class CreateGame extends React.Component {
             <div className="modal-content">
 
               <div className="modal-header">
-                <h4 className="modal-title">How many rounds would you like to play?</h4>
+                <h4 className="modal-title">How many points would you like to play to?</h4>
                 <button type="button" className="close" data-dismiss="modal">&times;</button>
               </div>
 
               <div className="form-group">
-                <select onChange={(e) => this.setState({ rounds: e.target.value })} className="form-control">
+                <select onChange={(e) => this.setState({ toWin: e.target.value })} className="form-control">
                   <option value='1'>1</option>
                   <option value='2'>2</option>
                   <option value='3'>3</option>

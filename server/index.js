@@ -47,10 +47,11 @@ io.on('connection', function (socket) {
             rooms[room].players = 2
             rooms[room].player2 = name
             var rounds = rooms[room].rounds
+            var opponent = rooms[room].player1
             users[id] = room;
             socket.join(data.room);
-            socket.broadcast.to(data.room).emit('startGame', { name: data.name });
-            socket.emit('player2', { name, room, rounds })
+            socket.emit('player2', { name, room, rounds, opponent })
+            socket.to(room).emit('player2joined', {name})
         }
         else if (!room) {
             socket.emit('player2', { message: 'Sorry, that room does not exist!' });

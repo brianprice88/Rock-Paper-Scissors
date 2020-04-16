@@ -17,3 +17,31 @@
     animation: glow 1s ease-in-out infinite alternate;
       
 }
+
+.scoreboard {
+  border: 1px solid black;
+  background-color: teal;
+  font-weight: bold;
+  color: blue;
+  font-family: Impact
+}
+
+.alert {
+  left: 0;
+  margin: auto;
+  right: 0;
+  text-align: center;
+  top: 1em;
+  width: 80%;
+  z-index: 1;
+}
+
+.waiting {
+  animation: blinker 2s linear infinite;
+}
+
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}

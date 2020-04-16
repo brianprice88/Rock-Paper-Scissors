@@ -30,12 +30,12 @@ export default class JoinGame extends React.Component {
                         <div className="modal-content">
 
                             <div className="modal-header">
-                                <h4 className="modal-title">What room would you like to join?</h4>
+                                <h4 className="modal-title">What room number would you like to join?</h4>
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                             </div>
 
                             <div className="form-group">
-                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room ID' className='form-control' required />
+                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room number' className='form-control' required />
 
                             </div>
 

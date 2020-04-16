@@ -13,8 +13,8 @@ export default class Lobby extends React.Component {
         }
     }
     
-    componentDidMount() {
-      this.thumbInterval = setInterval(() => this.setState({ visible: !this.state.visible }), 2000)   
+    componentDidMount() { 
+    this.thumbInterval = setInterval(() => this.setState({ visible: !this.state.visible }), 2000)   
     }
 
     componentWillUnmount() {

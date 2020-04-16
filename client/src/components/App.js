@@ -10,18 +10,27 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       isPlaying: false,
+      name: '',
+      room: '',
+      rounds: 1
     }
   this.beginGamePlayer1 = this.beginGamePlayer1.bind(this);
   this.beginGamePlayer2 = this.beginGamePlayer2.bind(this);
   }
 
-  beginGamePlayer1(name, rounds) {
-    socket.emit('createGame', {name, rounds})
+  beginGamePlayer1(name, rounds, room) {
+    socket.emit('createGame', {name, rounds, room})
     socket.on('player1', function(data) {
-      alert(`Your room number is ${data.room}.  Please notify other player to join this room.`)
+      if (data.message) {
+        alert(data.message)
+        return;
+      }
+      else {
+      alert(`Your room name is ${data.room}.  Please notify other player to join this room.`)
       // data.name = player1name
       // data.rounds = gameRounds
       // data.room = room id
+      }
     })
     // this.setState({isPlaying: true})
   }
@@ -30,6 +39,7 @@ export default class App extends React.Component {
     socket.emit('joinGame', {name, room})
     socket.on('player2', function(data) {
       if (data.message) {
+        alert(data.message)
         return;
       }
       else {console.log(data)}

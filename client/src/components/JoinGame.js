@@ -15,6 +15,9 @@ export default class JoinGame extends React.Component {
         if (name.length === 0 || !name.match(/^[a-zA-Z]+$/)) {
             alert("You must enter a valid name!"); return;
         }
+        if (room.length === 0 || !room.match(/^[a-zA-Z]+$/)) {
+            alert("You must enter a valid room name!"); return;
+        }
         this.props.startplayer2(name, room)
     }
 
@@ -30,12 +33,12 @@ export default class JoinGame extends React.Component {
                         <div className="modal-content">
 
                             <div className="modal-header">
-                                <h4 className="modal-title">What room number would you like to join?</h4>
+                                <h4 className="modal-title">What room would you like to join?</h4>
                                 <button type="button" className="close" data-dismiss="modal">&times;</button>
                             </div>
 
                             <div className="form-group">
-                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room number' className='form-control' required />
+                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room name' className='form-control' required />
 
                             </div>
 

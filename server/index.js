@@ -89,22 +89,37 @@ io.on('connection', function (socket) {
             room.player2choice = '';
             if (result === 'player1') {
                 room.player1score++;
-                    io.in(room).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
-                }
-             else if (result === 'player2') {
+                io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
+            } else if (result === 'player2') {
                 room.player2score++;
-                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player2' })
+                io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player2' })
             } else if (result === 'tie') {
                 io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'tie' })
             }
         }
     })
 
-    socket.on('resetGame', function(data) {
-    var room = rooms[data.room]
-    room.player1score = 0;
-    room.player2score = 0;
-    io.in(data.room).emit('startGame')
+    socket.on('resetGame', function (data) {
+        var room = rooms[data.room]
+        room.player1score = 0;
+        room.player2score = 0;
+        io.in(data.room).emit('startGame')
+    })
+
+    socket.on('leaveRoom', function (data) {
+        var room = rooms[data.room]
+        var player = data.player1 ? 'player1' : 'player2'
+        delete room[player]
+        socket.leave(data.room)
+        if (rooms[data.room]) {
+            socket.to(data.room).emit('playerLeft')
+            rooms[data.room].players--
+            room.player1score = 0;
+            room.player2score = 0;
+            if (rooms[data.room].players === 0) {
+                delete rooms[data.room]
+            }
+        }
     })
 
     socket.on('disconnect', function () { //delete the room if it's empty

@@ -1,9 +1,8 @@
 import React from 'react';
-import Score from './Score.js';
+import Score from './static/Score.js';
 import WaitingforOpponent from './static/Waiting';
-import GameOver from './static/GameOver'
-import images from '../images/images.js'
-import '../images/images.css';
+import GameOver from './static/GameOver';
+import Results from './static/Results';
 
 export default function Board(props) {
     return (
@@ -29,33 +28,27 @@ export default function Board(props) {
                 : null
             }
 
-            {props.gameOver ? < GameOver 
-            winner={props.winner} 
-            playAgain = {props.playAgain}
-            exitGame = {props.exitGame}
-            /> 
-            : null}
-
             {props.displayResult ?
-                <div className="container p-3" >
-                    <div className='row'>
-                        <div className={`col ${props.showThumbs ? "lefthandlobby" : "lefthandlobbyinvisible"}`}>
-                            {props.player1choice === 'rock' ? <images.leftRock /> : null}
-                            {props.player1choice === 'paper' ? <images.leftPaper /> : null}
-                            {props.player1choice === 'scissors' ? <images.leftScissors /> : null}
-                        </div>
-                        <div className='col'>
-                            {props.winner !== 'tie' ? <h1 className='titles'>{props.winner} wins!</h1> : <h1 className='titles'>Tie!</h1>}
-                        </div>
-                        <div className={`row ${props.showThumbs ? "righthandlobby" : "righthandlobbyinvisible"}`}>
-                            {props.player2choice === 'rock' ? <images.rightRock /> : null}
-                            {props.player2choice === 'paper' ? <images.rightPaper /> : null}
-                            {props.player2choice === 'scissors' ? <images.rightScissors /> : null}
-                        </div>
-                    </div>
-                </div> :
+                <Results
+                    player1choice={props.player1choice}
+                    player2choice={props.player2choice}
+                    winner={props.winner}
+                    showThumbs={props.showThumbs}
+                />
+                :
                 null
             }
+
+            {props.gameOver ?
+                < GameOver
+                    winner={props.winner}
+                    playAgain={props.playAgain}
+                    exitGame={props.exitGame}
+                />
+                :
+                <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
+            }
+
         </>
     )
 }

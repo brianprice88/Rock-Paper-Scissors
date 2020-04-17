@@ -74,20 +74,23 @@ export default class App extends React.Component {
     })
   }
 
-  opponentLeft() { //player1 finds out player 2 quit
+  opponentLeft() { //player finds out other player quit
     alert('Your opponent left!')
     this.setState({
       opponent: null,
+      showOptions: false,
+      player1score: 0,
+      player2score: 0,
     })
   }
 
-  startGame() { // start the game and reset scores if not first game in this room
-    this.setState({ 
+  startGame() { // start the game and also reset scores if we're resetting from previous game
+    this.setState({
       showOptions: true,
       player1score: 0,
       player2score: 0,
       gameOver: false
-     })
+    })
   }
 
   makeSelection(choice) { //hide selection menu and send player's selection to server
@@ -136,7 +139,7 @@ export default class App extends React.Component {
         gameOver: true,
         revealWinner: false
       })
-    }  else {
+    } else {
       alert('next round starting!')
       this.setState({
         revealWinner: false,
@@ -145,14 +148,30 @@ export default class App extends React.Component {
     }
   }
 
-  playAgain() {
-  socket.emit('resetGame', {room: this.state.room})
+  playAgain() { // play again
+    socket.emit('resetGame', { room: this.state.room })
   }
 
-  exitGame() {
-    alert('exit game!')
+  exitGame() { // quit the game
+    socket.emit('leaveRoom', { room: this.state.room, player1: this.state.isPlayer1 })
+    this.setState({
+      isPlaying: false,
+      name: '',
+      room: '',
+      isPlayer1: false,
+      toWin: 1,
+      player1score: 0,
+      player2score: 0,
+      opponent: '',
+      showOptions: false,
+      player1choice: '',
+      player2choice: '',
+      revealWinner: false,
+      displayThumbs: false,
+      winner: '',
+      gameOver: false
+    })
   }
-
   showError(data) { //display any error messages
     alert(data.message)
     return;
@@ -192,9 +211,9 @@ export default class App extends React.Component {
             winner={this.state.winner}
             displayResult={this.state.revealWinner}
             showThumbs={this.state.displayThumbs}
-            gameOver = {this.state.gameOver}
-            playAgain = {this.playAgain.bind(this)}
-            exitGame = {this.exitGame.bind(this)}
+            gameOver={this.state.gameOver}
+            playAgain={this.playAgain.bind(this)}
+            exitGame={this.exitGame.bind(this)}
           />}
       </>
 

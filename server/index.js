@@ -60,7 +60,7 @@ io.on('connection', function (socket) {
                 socket.join(data.room);
                 socket.emit('player2', { name, room, toWin, opponent }) // player 2 has joined
                 socket.to(room).emit('player2joined', { name }) // notify player 1
-                io.in(room).emit('startGame', { name, opponent }) // start the game
+                io.in(room).emit('startGame') // start the game
             }
         }
         else if (!roomName) {
@@ -89,7 +89,7 @@ io.on('connection', function (socket) {
             room.player2choice = '';
             if (result === 'player1') {
                 room.player1score++;
-                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
+                    io.in(room).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
                 }
              else if (result === 'player2') {
                 room.player2score++;
@@ -98,7 +98,13 @@ io.on('connection', function (socket) {
                 io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'tie' })
             }
         }
+    })
 
+    socket.on('resetGame', function(data) {
+    var room = rooms[data.room]
+    room.player1score = 0;
+    room.player2score = 0;
+    io.in(data.room).emit('startGame')
     })
 
     socket.on('disconnect', function () { //delete the room if it's empty

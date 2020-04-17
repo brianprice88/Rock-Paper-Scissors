@@ -1,6 +1,7 @@
 import React from 'react';
 import Score from './Score.js';
 import WaitingforOpponent from './static/Waiting';
+import GameOver from './static/GameOver'
 import images from '../images/images.js'
 import '../images/images.css';
 
@@ -18,7 +19,6 @@ export default function Board(props) {
 
             {props.opponent ? null : <WaitingforOpponent />}
 
-            {/* user picks from buttons -> whichever they click should fire function to App which notifies socket, which either tells them other player hasn't selected or figures out who wins/ties */}
             {props.showOptions ?
                 <div className="btn-group">
                     <h4>Make your choice:</h4>
@@ -28,6 +28,14 @@ export default function Board(props) {
                 </div>
                 : null
             }
+
+            {props.gameOver ? < GameOver 
+            winner={props.winner} 
+            playAgain = {props.playAgain}
+            exitGame = {props.exitGame}
+            /> 
+            : null}
+
             {props.displayResult ?
                 <div className="container p-3" >
                     <div className='row'>

@@ -31,8 +31,8 @@ export default class App extends React.Component {
     this.displayResult = this.displayResult.bind(this);
     this.nextRound = this.nextRound.bind(this);
     this.opponentLeft = this.opponentLeft.bind(this);
-    this.showOptions = this.showOptions.bind(this);
-    this.showError = this.showError.bind(this)
+    this.startGame = this.startGame.bind(this);
+    this.showError = this.showError.bind(this);
   }
 
   beginGamePlayer1(name, toWin, room) { // player 1 wants to create a room
@@ -81,8 +81,13 @@ export default class App extends React.Component {
     })
   }
 
-  showOptions() { //let player pick rock/paper/scissors for this round
-    this.setState({ showOptions: true })
+  startGame() { // start the game and reset scores if not first game in this room
+    this.setState({ 
+      showOptions: true,
+      player1score: 0,
+      player2score: 0,
+      gameOver: false
+     })
   }
 
   makeSelection(choice) { //hide selection menu and send player's selection to server
@@ -126,18 +131,26 @@ export default class App extends React.Component {
   }
 
   nextRound() {//end game if either player has won, otherwise start next round
-    if (this.state.player1score === this.state.toWin) {
-      alert('player 2 wins!')
-    } else if (this.state.player2score === this.state.toWin) {
-      alert('player 2 wins!')
-    } else {
+    if (this.state.player1score === this.state.toWin || this.state.player2score === this.state.toWin) {
+      this.setState({
+        gameOver: true,
+        revealWinner: false
+      })
+    }  else {
       alert('next round starting!')
       this.setState({
         revealWinner: false,
         showOptions: true
-      }
-      )
+      })
     }
+  }
+
+  playAgain() {
+  socket.emit('resetGame', {room: this.state.room})
+  }
+
+  exitGame() {
+    alert('exit game!')
   }
 
   showError(data) { //display any error messages
@@ -150,7 +163,7 @@ export default class App extends React.Component {
     socket.on('player1', this.joinRoomPlayer1)
     socket.on('player2', this.joinRoomPlayer2)
     socket.on('player2joined', this.player2joined)
-    socket.on('startGame', this.showOptions)
+    socket.on('startGame', this.startGame)
     socket.on('showResult', this.displayResult)
     socket.on('playerLeft', this.opponentLeft)
     socket.on('err', this.showError)
@@ -179,6 +192,9 @@ export default class App extends React.Component {
             winner={this.state.winner}
             displayResult={this.state.revealWinner}
             showThumbs={this.state.displayThumbs}
+            gameOver = {this.state.gameOver}
+            playAgain = {this.playAgain.bind(this)}
+            exitGame = {this.exitGame.bind(this)}
           />}
       </>
 

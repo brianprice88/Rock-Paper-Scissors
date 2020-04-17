@@ -22,7 +22,8 @@ export default class App extends React.Component {
       player2choice: '',
       revealWinner: false,
       displayThumbs: false,
-      winner: ''
+      winner: '',
+      gameOver: false
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
@@ -89,7 +90,7 @@ export default class App extends React.Component {
     socket.emit('playerChoice', { name: this.state.name, room: this.state.room, choice })
   }
 
-  displayResult(data) {
+  displayResult(data) { //show round result for a few seconds, then move to next round
     if (data.winner === 'player1') {
       let newScore = this.state.player1score + 1
       let winnerName = this.state.isPlayer1 ? this.state.name : this.state.opponent
@@ -100,8 +101,8 @@ export default class App extends React.Component {
         player1score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
-    }, () => setTimeout(this.nextRound, 3000))
-  }
+      }, () => setTimeout(this.nextRound, 3000))
+    }
     else if (data.winner === 'player2') {
       let newScore = this.state.player2score + 1
       let winnerName = !this.state.isPlayer1 ? this.state.name : this.state.opponent
@@ -112,8 +113,8 @@ export default class App extends React.Component {
         player2score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
-    }, () => setTimeout(this.nextRound, 3000))
-   } else if (data.winner === 'tie') {
+      }, () => setTimeout(this.nextRound, 3000))
+    } else if (data.winner === 'tie') {
       this.setState({
         winner: 'tie',
         revealWinner: true,
@@ -124,12 +125,19 @@ export default class App extends React.Component {
     }
   }
 
-  nextRound() {
-    alert('next round starting!')
-    this.setState({
-      revealWinner: false,
-      showOptions: true
-    })
+  nextRound() {//end game if either player has won, otherwise start next round
+    if (this.state.player1score === this.state.toWin) {
+      alert('player 2 wins!')
+    } else if (this.state.player2score === this.state.toWin) {
+      alert('player 2 wins!')
+    } else {
+      alert('next round starting!')
+      this.setState({
+        revealWinner: false,
+        showOptions: true
+      }
+      )
+    }
   }
 
   showError(data) { //display any error messages
@@ -170,7 +178,7 @@ export default class App extends React.Component {
             player2choice={this.state.player2choice}
             winner={this.state.winner}
             displayResult={this.state.revealWinner}
-            showThumbs = {this.state.displayThumbs}
+            showThumbs={this.state.displayThumbs}
           />}
       </>
 

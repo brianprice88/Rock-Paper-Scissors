@@ -82,36 +82,19 @@ io.on('connection', function (socket) {
             room.player2choice = choice;
         }
         if (room.player1choice !== '' && room.player2choice !== '') { // only proceed if both players have selected
-            var result = utils.roundResult(room.player1choice, room.player2choice)
-            console.log(room)
+            var result = utils.roundResult(room.player1choice, room.player2choice);
+            var player1 = room.player1choice;
+            var player2 = room.player2choice;
+            room.player1choice = '';
+            room.player2choice = '';
             if (result === 'player1') {
                 room.player1score++;
-                if (room.player1score === room.toWin) {
-                    // emit the endGame event
-                } else {
-                    var player1 = room.player1choice;
-                    var player2 = room.player2choice;
-                    room.player1choice = '';
-                    room.player2choice = '';
                     io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
                 }
-
-            } else if (result === 'player2') {
+             else if (result === 'player2') {
                 room.player2score++;
-                if (room.player1score === room.toWin) {
-                    // emit the endGame event
-                } else {
-                    var player1 = room.player1choice;
-                    var player2 = room.player2choice;
-                    room.player1choice = '';
-                    room.player2choice = '';
-                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
-                }
+                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player2' })
             } else if (result === 'tie') {
-                var player1 = room.player1choice;
-                var player2 = room.player2choice;
-                room.player1choice = ''
-                room.player2choice = ''
                 io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'tie' })
             }
         }

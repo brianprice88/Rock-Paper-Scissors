@@ -5,15 +5,18 @@ export default class JoinGame extends React.Component {
         super(props);
         this.state = {
             name: '',
-            room: 'A'
+            room: 0
         }
         this.joinGame = this.joinGame.bind(this)
     }
     joinGame() {
         const name = this.state.name;
         const room = this.state.room
-        if (name.length === 0 || !name.match(/^[a-zA-Z\-]+$/)) {
+        if (name.length === 0 || !name.match(/^[a-zA-Z]+$/)) {
             alert("You must enter a valid name!"); return;
+        }
+        if (room.length === 0 || !room.match(/^[a-zA-Z]+$/)) {
+            alert("You must enter a valid room name!"); return;
         }
         this.props.startplayer2(name, room)
     }
@@ -35,18 +38,8 @@ export default class JoinGame extends React.Component {
                             </div>
 
                             <div className="form-group">
-                                <select onChange={(e) => this.setState({ rounds: e.target.value })} className="form-control">
-                                    <option value='A'>A</option>
-                                    <option value='B'>B</option>
-                                    <option value='C'>C</option>
-                                    <option value='D'>D</option>
-                                    <option value='E'>E</option>
-                                    <option value='F'>F</option>
-                                    <option value='G'>G</option>
-                                    <option value='H'>H</option>
-                                    <option value='I'>I</option>
-                                    <option value='J'>J</option>
-                                </select>
+                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room name' className='form-control' required />
+
                             </div>
 
                             <input onChange={(e) => this.setState({ name: e.target.value })} type='text' placeholder='Enter your name' className='form-control' required />

@@ -2,9 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './components/App';
 import Lobby from './components/Lobby';
-import Topbar from './components/Topbar';
+import Topbar from './components/static/Topbar';
 import CreateGame from './components/CreateGame';
 import JoinGame from './components/JoinGame';
+import Board from './components/Board'
 
 test('renders the App component', () => {
   const { app } = render(<App />);;
@@ -29,4 +30,9 @@ test('renders the CreateGame component', () => {
 test('renders the JoinGame component', () => {
   const { joinGame } = render(<JoinGame />);;
   expect({joinGame}).toExist
+});
+
+test('renders the Board component', () => {
+  const { board} = render(<Board />);;
+  expect({board}).toExist
 });

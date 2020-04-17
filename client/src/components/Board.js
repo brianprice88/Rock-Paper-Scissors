@@ -16,8 +16,7 @@ export default function Board(props) {
                 opponent={props.opponent}
             />
 
-            {props.opponent ? null : <WaitingforOpponent action='join' />}
-            {/* add same thing here but action='select' for when other player hasn't chosen yet */}
+            {props.opponent ? null : <WaitingforOpponent />}
 
             {/* user picks from buttons -> whichever they click should fire function to App which notifies socket, which either tells them other player hasn't selected or figures out who wins/ties */}
             {props.showOptions ?

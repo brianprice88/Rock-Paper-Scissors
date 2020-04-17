@@ -28,6 +28,7 @@ export default class App extends React.Component {
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
     this.player2joined = this.player2joined.bind(this);
     this.displayResult = this.displayResult.bind(this);
+    this.nextRound = this.nextRound.bind(this);
     this.opponentLeft = this.opponentLeft.bind(this);
     this.showOptions = this.showOptions.bind(this);
     this.showError = this.showError.bind(this)
@@ -99,7 +100,7 @@ export default class App extends React.Component {
         player1score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
-    })
+    }, () => setTimeout(this.nextRound, 3000))
   }
     else if (data.winner === 'player2') {
       let newScore = this.state.player2score + 1
@@ -111,7 +112,7 @@ export default class App extends React.Component {
         player2score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
-    })
+    }, () => setTimeout(this.nextRound, 3000))
    } else if (data.winner === 'tie') {
       this.setState({
         winner: 'tie',
@@ -119,8 +120,16 @@ export default class App extends React.Component {
         displayThumbs: true,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
-      })
+      }, () => setTimeout(this.nextRound, 3000))
     }
+  }
+
+  nextRound() {
+    alert('next round starting!')
+    this.setState({
+      revealWinner: false,
+      showOptions: true
+    })
   }
 
   showError(data) { //display any error messages

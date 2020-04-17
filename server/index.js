@@ -108,9 +108,11 @@ io.on('connection', function (socket) {
                     io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
                 }
             } else if (result === 'tie') {
+                var player1 = room.player1choice;
+                var player2 = room.player2choice;
                 room.player1choice = ''
                 room.player2choice = ''
-                io.in(roomName).emit('showResult', { winner: 'tie' })
+                io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'tie' })
             }
         }
 

@@ -20,6 +20,9 @@ export default class App extends React.Component {
       showOptions: false,
       player1choice: '',
       player2choice: '',
+      revealWinner: false,
+      displayThumbs: false,
+      winner: ''
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
@@ -35,7 +38,7 @@ export default class App extends React.Component {
   }
 
   beginGamePlayer2(name, room) { // player 2 wants to join a room
-    this.setState({showOptions: false})
+    this.setState({ showOptions: false })
     socket.emit('joinGame', { name, room })
   }
 
@@ -77,16 +80,47 @@ export default class App extends React.Component {
   }
 
   showOptions() { //let player pick rock/paper/scissors for this round
-    this.setState({showOptions: true})
+    this.setState({ showOptions: true })
   }
 
   makeSelection(choice) { //hide selection menu and send player's selection to server
-  this.setState({showOptions: false})
-  socket.emit('playerChoice', {name: this.state.name, room: this.state.room, choice})
+    this.setState({ showOptions: false })
+    socket.emit('playerChoice', { name: this.state.name, room: this.state.room, choice })
   }
 
   displayResult(data) {
-    console.log(data)
+    if (data.winner === 'player1') {
+      let newScore = this.state.player1score + 1
+      let winnerName = this.state.isPlayer1 ? this.state.name : this.state.opponent
+      this.setState({
+        winner: winnerName,
+        revealWinner: true,
+        displayThumbs: true,
+        player1score: newScore,
+        player1choice: data.player1choice,
+        player2choice: data.player2choice,
+    })
+  }
+    else if (data.winner === 'player2') {
+      let newScore = this.state.player2score + 1
+      let winnerName = !this.state.isPlayer1 ? this.state.name : this.state.opponent
+      this.setState({
+        winner: winnerName,
+        revealWinner: true,
+        displayThumbs: true,
+        player2score: newScore,
+        player1choice: data.player1choice,
+        player2choice: data.player2choice,
+    })
+   } else if (data.winner === 'tie') {
+      this.setState({
+        winner: 'tie',
+        revealWinner: true,
+        displayThumbs: true,
+        player1choice: data.player1choice,
+        player2choice: data.player2choice,
+      })
+    }
   }
 
   showError(data) { //display any error messages
@@ -121,10 +155,13 @@ export default class App extends React.Component {
             player1score={this.state.player1score}
             player2score={this.state.player2score}
             opponent={this.state.opponent}
-            showOptions = {this.state.showOptions}
-            makeSelection = {this.makeSelection.bind(this)}
-            player1choice = {this.state.player1choice}
-            player2choice = {this.state.player2choice}
+            showOptions={this.state.showOptions}
+            makeSelection={this.makeSelection.bind(this)}
+            player1choice={this.state.player1choice}
+            player2choice={this.state.player2choice}
+            winner={this.state.winner}
+            displayResult={this.state.revealWinner}
+            showThumbs = {this.state.displayThumbs}
           />}
       </>
 

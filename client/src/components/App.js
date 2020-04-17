@@ -12,13 +12,14 @@ export default class App extends React.Component {
       isPlaying: false,
       name: '',
       room: '',
-      toWin: 1,
       isPlayer1: false,
-      isPlayer2: false,
+      toWin: 1,
       player1score: 0,
       player2score: 0,
       opponent: '',
-      showOptions: false
+      showOptions: false,
+      player1choice: 'Rock',
+      player2choice: 'Scissors',
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
@@ -54,7 +55,7 @@ export default class App extends React.Component {
       name: data.name,
       room: data.room,
       toWin: data.toWin,
-      isPlayer2: true,
+      isPlayer1: false,
       opponent: data.opponent
     })
   }
@@ -108,11 +109,12 @@ export default class App extends React.Component {
             room={this.state.room}
             toWin={this.state.toWin}
             isPlayer1={this.state.isPlayer1}
-            isPlayer2={this.state.isPlayer2}
             player1score={this.state.player1score}
             player2score={this.state.player2score}
             opponent={this.state.opponent}
             makingSelection={this.state.showOptions}
+            player1choice = {this.state.player1choice}
+            player2choice = {this.state.player2choice}
           />}
       </>
 

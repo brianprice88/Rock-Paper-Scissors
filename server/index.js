@@ -1,4 +1,5 @@
-const router = require('./router.js')
+const utils = require('./utils.js')
+const router = require('./router.js');
 const app = require('express')();
 app.use('/api', router)
 

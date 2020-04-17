@@ -33,15 +33,3 @@ module.exports.roundResult = function (player1, player2) {
         }
     }
 }
-
-module.exports.isWinner = function (player1Score, player2Score, target) {
-    if (player1Score === target) {
-        return 'player1'
-    }
-    else if (player2Score === target) {
-        return 'player2'
-    }
-    else {
-        return null
-    }
-}

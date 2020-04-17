@@ -33,6 +33,8 @@ io.on('connection', function (socket) {
                 players: 1,
                 toWin: toWin,
                 player1: name,
+                player1score: 0,
+                player1choice: ''
             }
             users[id] = room;
             socket.join(room)
@@ -45,15 +47,21 @@ io.on('connection', function (socket) {
         var room = data.room
         var roomName = io.nsps['/'].adapter.rooms[room]
         if (roomName && roomName.length === 1) {
-            rooms[room].players = 2
-            rooms[room].player2 = name
-            var toWin = rooms[room].toWin
-            var opponent = rooms[room].player1
-            users[id] = room;
-            socket.join(data.room);
-            socket.emit('player2', { name, room, toWin, opponent }) // player 2 has joined
-            socket.to(room).emit('player2joined', {name}) // notify player 1
-            io.in(room).emit('startGame', {name, opponent}) // start the game
+            if (rooms[room].player1 === name) {
+                socket.emit('err', { message: 'Sorry, that name is already taken!!' });
+            } else {
+                rooms[room].players = 2
+                rooms[room].player2 = name
+                rooms[room].player2score = 0;
+                rooms[room].player2choice = '';
+                var toWin = rooms[room].toWin
+                var opponent = rooms[room].player1
+                users[id] = room;
+                socket.join(data.room);
+                socket.emit('player2', { name, room, toWin, opponent }) // player 2 has joined
+                socket.to(room).emit('player2joined', { name }) // notify player 1
+                io.in(room).emit('startGame', { name, opponent }) // start the game
+            }
         }
         else if (!roomName) {
             socket.emit('err', { message: 'Sorry, that room does not exist!' });
@@ -62,6 +70,51 @@ io.on('connection', function (socket) {
             socket.emit('err', { message: 'Sorry, that room is full!' });
         }
     });
+
+    socket.on('playerChoice', function (data) {
+        var roomName = data.room;
+        var room = rooms[data.room];
+        var name = data.name;
+        var choice = data.choice;
+        if (room.player1 === name) {
+            room.player1choice = choice
+        } else if (room.player2 === name) {
+            room.player2choice = choice;
+        }
+        if (room.player1choice !== '' && room.player2choice !== '') { // only proceed if both players have selected
+            var result = utils.roundResult(room.player1choice, room.player2choice)
+            console.log(room)
+            if (result === 'player1') {
+                room.player1score++;
+                if (room.player1score === room.toWin) {
+                    // emit the endGame event
+                } else {
+                    var player1 = room.player1choice;
+                    var player2 = room.player2choice;
+                    room.player1choice = '';
+                    room.player2choice = '';
+                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
+                }
+
+            } else if (result === 'player2') {
+                room.player2score++;
+                if (room.player1score === room.toWin) {
+                    // emit the endGame event
+                } else {
+                    var player1 = room.player1choice;
+                    var player2 = room.player2choice;
+                    room.player1choice = '';
+                    room.player2choice = '';
+                    io.in(roomName).emit('showResult', { player1choice: player1, player2choice: player2, winner: 'player1' })
+                }
+            } else if (result === 'tie') {
+                room.player1choice = ''
+                room.player2choice = ''
+                io.in(roomName).emit('showResult', { winner: 'tie' })
+            }
+        }
+
+    })
 
     socket.on('disconnect', function () { //delete the room if it's empty
         var leftRoom = users[id];

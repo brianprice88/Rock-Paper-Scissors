@@ -1,6 +1,6 @@
 import React from 'react';
 import socketIOClient from "socket.io-client";
-import Topbar from './Topbar.js';
+import Topbar from './static/Topbar.js';
 import Lobby from './Lobby.js';
 import Board from './Board.js';
 const socket = socketIOClient("http://192.168.1.6:3001")
@@ -18,12 +18,13 @@ export default class App extends React.Component {
       player2score: 0,
       opponent: '',
       showOptions: false,
-      player1choice: 'Rock',
-      player2choice: 'Scissors',
+      player1choice: '',
+      player2choice: '',
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
     this.player2joined = this.player2joined.bind(this);
+    this.displayResult = this.displayResult.bind(this);
     this.opponentLeft = this.opponentLeft.bind(this);
     this.showOptions = this.showOptions.bind(this);
     this.showError = this.showError.bind(this)
@@ -34,6 +35,7 @@ export default class App extends React.Component {
   }
 
   beginGamePlayer2(name, room) { // player 2 wants to join a room
+    this.setState({showOptions: false})
     socket.emit('joinGame', { name, room })
   }
 
@@ -78,7 +80,16 @@ export default class App extends React.Component {
     this.setState({showOptions: true})
   }
 
-  showError(data) { //display error messages
+  makeSelection(choice) { //hide selection menu and send player's selection to server
+  this.setState({showOptions: false})
+  socket.emit('playerChoice', {name: this.state.name, room: this.state.room, choice})
+  }
+
+  displayResult(data) {
+    console.log(data)
+  }
+
+  showError(data) { //display any error messages
     alert(data.message)
     return;
   }
@@ -88,9 +99,8 @@ export default class App extends React.Component {
     socket.on('player1', this.joinRoomPlayer1)
     socket.on('player2', this.joinRoomPlayer2)
     socket.on('player2joined', this.player2joined)
-
     socket.on('startGame', this.showOptions)
-    
+    socket.on('showResult', this.displayResult)
     socket.on('playerLeft', this.opponentLeft)
     socket.on('err', this.showError)
   }
@@ -106,13 +116,13 @@ export default class App extends React.Component {
           />
           : <Board
             name={this.state.name}
-            room={this.state.room}
             toWin={this.state.toWin}
             isPlayer1={this.state.isPlayer1}
             player1score={this.state.player1score}
             player2score={this.state.player2score}
             opponent={this.state.opponent}
-            makingSelection={this.state.showOptions}
+            showOptions = {this.state.showOptions}
+            makeSelection = {this.makeSelection.bind(this)}
             player1choice = {this.state.player1choice}
             player2choice = {this.state.player2choice}
           />}

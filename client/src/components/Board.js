@@ -16,7 +16,7 @@ export default function Board(props) {
                 opponent={props.opponent}
             />
 
-            {props.opponent ? null : <Notification text='waiting for opponent to join' />}
+            {props.notification ? <Notification text={props.notificationText} /> : null}
 
             {props.showOptions ?
                 <div className="btn-group">
@@ -45,7 +45,7 @@ export default function Board(props) {
                     exitGame={props.exitGame}
                 />
                 :
-                <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
+            <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
             }
 
         </>

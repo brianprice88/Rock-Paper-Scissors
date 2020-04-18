@@ -1,6 +1,7 @@
 import React from 'react';
 import socketIOClient from "socket.io-client";
 import Topbar from './static/Topbar.js';
+import Error from './static/Error.js';
 import Lobby from './Lobby.js';
 import Board from './Board.js';
 const socket = socketIOClient("http://192.168.1.6:3001")
@@ -22,7 +23,11 @@ export default class App extends React.Component {
       player2choice: '',
       revealWinner: false,
       winner: '',
-      gameOver: false
+      gameOver: false,
+      notification: false,
+      notificationText: '',
+      error: false,
+      errorMessage: ''
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
@@ -44,13 +49,14 @@ export default class App extends React.Component {
   }
 
   joinRoomPlayer1(data) { //player 1 creates and joins room
-    alert(`Room ${data.room} successfully created.  Please notify other player to join.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
       toWin: data.toWin,
-      isPlayer1: true
+      isPlayer1: true,
+      notification: true,
+      notificationText: `Room ${data.room} successfully created.  Please notify other player to join.`
     })
   }
 
@@ -69,7 +75,7 @@ export default class App extends React.Component {
   player2joined(data) { //player1 is informed that player 2 has joined
     alert(`${data.name} joined the room!`)
     this.setState({
-      opponent: data.name,
+      opponent: data.name
     })
   }
 
@@ -168,8 +174,16 @@ export default class App extends React.Component {
     })
   }
   showError(data) { //display any error messages
-    alert(data.message)
-    return;
+    this.setState({
+      error: true,
+      errorMessage: data.message
+    })
+  }
+
+  clearError() {
+    this.setState({
+      error: false,
+    })
   }
 
   componentDidMount() {
@@ -188,9 +202,18 @@ export default class App extends React.Component {
     return (
       <>
         <Topbar />
+        
+        {this.state.error ? 
+        <Error 
+        errorMessage={this.state.errorMessage}
+        clearError={this.clearError.bind(this)}
+        /> 
+        : null }
+        
         {!this.state.isPlaying ?
           <Lobby
-            startplayer1={this.beginGamePlayer1.bind(this)} startplayer2={this.beginGamePlayer2.bind(this)}
+            startplayer1={this.beginGamePlayer1.bind(this)} 
+            startplayer2={this.beginGamePlayer2.bind(this)}
           />
           : <Board
             name={this.state.name}
@@ -208,7 +231,9 @@ export default class App extends React.Component {
             gameOver={this.state.gameOver}
             playAgain={this.playAgain.bind(this)}
             exitGame={this.exitGame.bind(this)}
-          />}
+            notification={this.state.notification}
+            notificationText={this.state.notificationText}
+          /> }
       </>
 
     )

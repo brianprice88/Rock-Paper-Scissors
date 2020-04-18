@@ -54,7 +54,10 @@ export default class App extends React.Component {
       name: data.name,
       room: data.room,
       toWin: data.toWin,
+      revealWinner: false,
+      gameOver: false,
       isPlayer1: true,
+      error: false,
       notification: true,
       notificationText: `Room ${data.room} successfully created.  Please notify other player to join.`
     })
@@ -67,6 +70,8 @@ export default class App extends React.Component {
       room: data.room,
       toWin: data.toWin,
       isPlayer1: false,
+      revealWinner: false,
+      gameOver: false,
       opponent: data.opponent,
       error: false,
       notification: true,
@@ -83,14 +88,14 @@ export default class App extends React.Component {
   }
 
   opponentLeft() { //player finds out other player quit
+    var opponent = this.state.opponent
     this.setState({
-      opponent: null,
+      isPlaying: false,
       showOptions: false,
-      player1score: 0,
-      player2score: 0,
-      notification: true,
-      notificationText: 'Your opponent left!'
+      error: true,
+      errorMessage: `${opponent} left.  Game over.`
     })
+    socket.emit('leaveRoom', { room: this.state.room, player1: this.state.isPlayer1 })
   }
 
   startGame() { // start the game and also reset scores if we're resetting from previous game
@@ -195,7 +200,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-
     socket.on('player1', this.joinRoomPlayer1)
     socket.on('player2', this.joinRoomPlayer2)
     socket.on('player2joined', this.player2joined)
@@ -210,17 +214,17 @@ export default class App extends React.Component {
     return (
       <>
         <Topbar />
-        
-        {this.state.error ? 
-        <Error 
-        errorMessage={this.state.errorMessage}
-        clearError={this.clearError.bind(this)}
-        /> 
-        : null }
-        
+
+        {this.state.error ?
+          <Error
+            errorMessage={this.state.errorMessage}
+            clearError={this.clearError.bind(this)}
+          />
+          : null}
+
         {!this.state.isPlaying ?
           <Lobby
-            startplayer1={this.beginGamePlayer1.bind(this)} 
+            startplayer1={this.beginGamePlayer1.bind(this)}
             startplayer2={this.beginGamePlayer2.bind(this)}
           />
           : <Board
@@ -241,7 +245,7 @@ export default class App extends React.Component {
             exitGame={this.exitGame.bind(this)}
             notification={this.state.notification}
             notificationText={this.state.notificationText}
-          /> }
+          />}
       </>
 
     )

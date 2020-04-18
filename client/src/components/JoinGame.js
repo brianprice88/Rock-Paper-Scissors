@@ -7,18 +7,24 @@ export default class JoinGame extends React.Component {
             name: '',
             room: 0
         }
-        this.joinGame = this.joinGame.bind(this)
+        this.joinGame = this.joinGame.bind(this);
+        this.addText = this.addText.bind(this);
     }
+
+    addText(property, value) {
+        if (value.match(/^[a-zA-Z]+$/)) {
+            this.setState({
+              [property]: value
+            })
+        }
+    }
+
     joinGame() {
         const name = this.state.name;
         const room = this.state.room
-        if (name.length === 0 || !name.match(/^[a-zA-Z]+$/)) {
-            alert("You must enter a valid name!"); return;
+        if (name.length > 0 && room.length > 0) {
+            this.props.startplayer2(name, room)
         }
-        if (room.length === 0 || !room.match(/^[a-zA-Z]+$/)) {
-            alert("You must enter a valid room name!"); return;
-        }
-        this.props.startplayer2(name, room)
     }
 
     render() {
@@ -38,11 +44,11 @@ export default class JoinGame extends React.Component {
                             </div>
 
                             <div className="form-group">
-                                <input onChange={(e) => this.setState({ room: e.target.value })} type='text' placeholder='Enter room name' className='form-control' required />
+                                <input onChange={(e) => this.addText('room', e.target.value)} type='text' placeholder='Enter room name' className='form-control' required />
 
                             </div>
 
-                            <input onChange={(e) => this.setState({ name: e.target.value })} type='text' placeholder='Enter your name' className='form-control' required />
+                            <input onChange={(e) => this.addText('name', e.target.value)} type='text' placeholder='Enter your name' className='form-control' required />
 
 
                             <div className="modal-footer">

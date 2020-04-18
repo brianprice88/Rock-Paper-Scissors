@@ -21,7 +21,6 @@ export default class App extends React.Component {
       player1choice: '',
       player2choice: '',
       revealWinner: false,
-      displayThumbs: false,
       winner: '',
       gameOver: false
     }
@@ -105,7 +104,6 @@ export default class App extends React.Component {
       this.setState({
         winner: winnerName,
         revealWinner: true,
-        displayThumbs: true,
         player1score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
@@ -117,7 +115,6 @@ export default class App extends React.Component {
       this.setState({
         winner: winnerName,
         revealWinner: true,
-        displayThumbs: true,
         player2score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
@@ -126,7 +123,6 @@ export default class App extends React.Component {
       this.setState({
         winner: 'tie',
         revealWinner: true,
-        displayThumbs: true,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
       }, () => setTimeout(this.nextRound, 3000))
@@ -143,7 +139,7 @@ export default class App extends React.Component {
       alert('next round starting!')
       this.setState({
         revealWinner: false,
-        showOptions: true
+        showOptions: true,
       })
     }
   }
@@ -167,7 +163,6 @@ export default class App extends React.Component {
       player1choice: '',
       player2choice: '',
       revealWinner: false,
-      displayThumbs: false,
       winner: '',
       gameOver: false
     })
@@ -210,7 +205,6 @@ export default class App extends React.Component {
             player2choice={this.state.player2choice}
             winner={this.state.winner}
             displayResult={this.state.revealWinner}
-            showThumbs={this.state.displayThumbs}
             gameOver={this.state.gameOver}
             playAgain={this.playAgain.bind(this)}
             exitGame={this.exitGame.bind(this)}

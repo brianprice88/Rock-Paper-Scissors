@@ -14,7 +14,7 @@ export default class JoinGame extends React.Component {
     addText(property, value) {
         if (value.match(/^[a-zA-Z]+$/)) {
             this.setState({
-              [property]: value
+                [property]: value
             })
         }
     }
@@ -46,10 +46,9 @@ export default class JoinGame extends React.Component {
                             <div className="form-group">
                                 <input onChange={(e) => this.addText('room', e.target.value)} type='text' placeholder='Enter room name' className='form-control' required />
 
+                                <input onChange={(e) => this.addText('name', e.target.value)} type='text' placeholder='Enter your name' className='form-control' required />
+
                             </div>
-
-                            <input onChange={(e) => this.addText('name', e.target.value)} type='text' placeholder='Enter your name' className='form-control' required />
-
 
                             <div className="modal-footer">
                                 <button onClick={this.joinGame} type="button" className="btn btn-danger" data-dismiss="modal">Start game!</button>

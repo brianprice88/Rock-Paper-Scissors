@@ -1,12 +1,13 @@
 import React from 'react';
 import Score from './static/Score.js';
+import Picker from './static/Picker.js'
 import Notification from './static/Notification';
 import GameOver from './static/GameOver';
 import Results from './static/Results';
 
 export default function Board(props) {
     return (
-        <>
+        <div className='container-fluid'>
             <Score
                 player1score={props.player1score}
                 player2score={props.player2score}
@@ -14,17 +15,17 @@ export default function Board(props) {
                 name={props.name}
                 isPlayer1={props.isPlayer1}
                 opponent={props.opponent}
+                exitGame={props.exitGame}
             />
 
-            {props.notification ? <Notification text={props.notificationText} /> : null}
+            {props.notification ?
+                <Notification
+                    text={props.notificationText} />
+                : null}
 
             {props.showOptions ?
-                <div className="btn-group">
-                    <h4>Make your choice:</h4>
-                    <button onClick={() => props.makeSelection('rock')} type="button" className="btn btn-secondary gameBtn">Rock</button>
-                    <button onClick={() => props.makeSelection('paper')} type="button" className="btn btn-secondary gameBtn">Paper</button>
-                    <button onClick={() => props.makeSelection('scissors')} type="button" className="btn btn-secondary gameBtn">Scissors</button>
-                </div>
+                <Picker
+                    makeSelection={props.makeSelection} />
                 : null
             }
 
@@ -45,9 +46,9 @@ export default function Board(props) {
                     exitGame={props.exitGame}
                 />
                 :
-            <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
+                null
             }
 
-        </>
+        </div>
     )
 }

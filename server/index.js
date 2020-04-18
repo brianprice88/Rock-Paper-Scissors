@@ -1,7 +1,5 @@
 const utils = require('./utils.js')
-const router = require('./router.js');
 const app = require('express')();
-app.use('/api', router)
 
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
@@ -135,8 +133,6 @@ io.on('connection', function (socket) {
         }
         console.log(`A user disconnected: current user count is ${Object.keys(users).length}`)
     })
-
 });
-
 
 server.listen(port)

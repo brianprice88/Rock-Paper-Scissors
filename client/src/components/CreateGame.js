@@ -48,7 +48,7 @@ export default class CreateGame extends React.Component {
 
               <div className="form-group">
                 <select onChange={(e) => this.setState({ toWin: e.target.value })} className="form-control">
-                  <option selected value='1'>1</option>
+                  <option value='1'>1</option>
                   <option value='2'>2</option>
                   <option value='3'>3</option>
                   <option value='4'>4</option>

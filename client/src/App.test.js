@@ -5,7 +5,8 @@ import Lobby from './components/Lobby';
 import Topbar from './components/static/Topbar';
 import CreateGame from './components/CreateGame';
 import JoinGame from './components/JoinGame';
-import Board from './components/Board'
+import Board from './components/Board';
+import Error from './components/static/Error';
 
 test('renders the App component', () => {
   const { app } = render(<App />);;
@@ -33,6 +34,11 @@ test('renders the JoinGame component', () => {
 });
 
 test('renders the Board component', () => {
-  const { board} = render(<Board />);;
+  const { board } = render(<Board />);;
   expect({board}).toExist
+});
+
+test('renders the Error component', () => {
+  const { error } = render(<Error />);;
+  expect({error}).toExist
 });

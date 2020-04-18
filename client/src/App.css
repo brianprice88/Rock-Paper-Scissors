@@ -1,4 +1,4 @@
-/* Rock Paper Scissors on lobby */
+/* App title in lobby */
 
 @keyframes glow {
     from {
@@ -14,15 +14,14 @@
     font-size: 80px;
     font-family: cursive;
     color: blue;
-    /* -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
     -moz-animation: glow 1s ease-in-out infinite alternate;
-    animation: glow 1s ease-in-out infinite alternate; */
+    animation: glow 1s ease-in-out infinite alternate;
 }
 
+/*Notification */
 
-/*Waiting for other player to join */
-
-.waiting {
+.notification {
   animation: blinker 2s linear infinite;
 }
 
@@ -52,11 +51,75 @@
   font-family: Impact
 }
 
-/* Fireworks for winner */
+.scoreboard-middle {
+  text-align: center;
+  padding: 10px 0 5px 0;
+}
+
+.scoreboard-text {
+  font-family: Orbitron;
+  font-size: 36px;
+}
+
+/* Results */
+
+.results-thumbs {
+animation-duration: 2s;
+}
+
+.results-winner {
+animation-duration: 3s;
+}
+
+/* Picker */
+
+.picker {
+  margin-left: 15%;
+  margin-top: 20px
+}
+
+.choose {
+  color: purple;
+  text-align: center;
+  margin-top: 50px;
+  margin-left: 50px;
+  letter-spacing: 1em;
+  font-size: 36px;
+  text-transform: uppercase;
+  -webkit-animation: glow 1s ease-in-out infinite alternate;
+  -moz-animation: glow 1s ease-in-out infinite alternate;
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
+.select-btn {
+  margin: 60px;
+  height: 150px;
+  width: 150px
+}
+
+.select-img {
+  font-size: 72px;
+  color: black
+}
+
+/* Game over */
 
 .pyro {
   text-align: center;
-  background-color: green;
+}
+
+.winner {
+  margin-top: 50px;
+  letter-spacing: .5em;
+  font-size: 48px;
+  text-transform: uppercase;
+  color: #00ddff;
+  font-family: cursive;
+}
+
+.endgame-btn {
+  margin-left: 35%;
+  margin-top: 50px
 }
 
 .pyro > .before, .pyro > .after {

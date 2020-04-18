@@ -162,7 +162,9 @@ export default class App extends React.Component {
   playAgain() { // play again
     this.setState({
       notification: true,
-      notificationText: 'Get ready to play again!'
+      notificationText: 'Get ready to play again!',
+      gameOver: false,
+      displayResult: false
     })
     socket.emit('resetGame', { room: this.state.room })
   }
@@ -208,7 +210,6 @@ export default class App extends React.Component {
     socket.on('playerLeft', this.opponentLeft)
     socket.on('err', this.showError)
   }
-
 
   render() {
     return (

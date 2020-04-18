@@ -14,7 +14,7 @@ if (process.env.NODE_ENV === 'production') {
     })
 }
 
-var rooms = {}; //make sure to delete keys (rooms) when games end, not just when users disconnect
+var rooms = {};
 var users = {};
 
 io.on('connection', function (socket) {
@@ -111,7 +111,7 @@ io.on('connection', function (socket) {
         var player = data.player1 ? 'player1' : 'player2'
         delete room[player]
         socket.leave(data.room)
-        if (rooms[data.room]) {
+        if (rooms[data.room]) { //if the other player is still there, let them know
             socket.to(data.room).emit('playerLeft')
             rooms[data.room].players--
             room.player1score = 0;
@@ -129,6 +129,7 @@ io.on('connection', function (socket) {
             socket.to(leftRoom).emit('playerLeft')
             rooms[leftRoom].players--
             if (rooms[leftRoom].players === 0) {
+                socket.leave(leftRoom)
                 delete rooms[leftRoom]
             }
         }

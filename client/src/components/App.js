@@ -1,6 +1,7 @@
 import React from 'react';
 import socketIOClient from "socket.io-client";
 import Topbar from './static/Topbar.js';
+import Error from './static/Error.js';
 import Lobby from './Lobby.js';
 import Board from './Board.js';
 const socket = socketIOClient("http://192.168.1.6:3001")
@@ -21,9 +22,12 @@ export default class App extends React.Component {
       player1choice: '',
       player2choice: '',
       revealWinner: false,
-      displayThumbs: false,
       winner: '',
-      gameOver: false
+      gameOver: false,
+      notification: false,
+      notificationText: '',
+      error: false,
+      errorMessage: ''
     }
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
@@ -45,52 +49,63 @@ export default class App extends React.Component {
   }
 
   joinRoomPlayer1(data) { //player 1 creates and joins room
-    alert(`Room ${data.room} successfully created.  Please notify other player to join.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
       toWin: data.toWin,
-      isPlayer1: true
+      revealWinner: false,
+      gameOver: false,
+      isPlayer1: true,
+      error: false,
+      notification: true,
+      notificationText: `Room ${data.room} successfully created.  Please notify other player to join.`
     })
   }
 
   joinRoomPlayer2(data) { //player 2 joins room
-    alert(`Room ${data.room} entered successfully!  The game is starting.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
       toWin: data.toWin,
       isPlayer1: false,
-      opponent: data.opponent
+      revealWinner: false,
+      gameOver: false,
+      opponent: data.opponent,
+      error: false,
+      notification: true,
+      notificationText: `Room ${data.room} entered successfully!  The game is starting.`
     })
   }
 
   player2joined(data) { //player1 is informed that player 2 has joined
-    alert(`${data.name} joined the room!`)
     this.setState({
       opponent: data.name,
+      notification: true,
+      notificationText: `${data.name} joined the room!  The game is starting.`
     })
   }
 
   opponentLeft() { //player finds out other player quit
-    alert('Your opponent left!')
+    var opponent = this.state.opponent
     this.setState({
-      opponent: null,
+      isPlaying: false,
       showOptions: false,
-      player1score: 0,
-      player2score: 0,
+      error: true,
+      errorMessage: `${opponent} left.  Game over.`
     })
+    socket.emit('leaveRoom', { room: this.state.room, player1: this.state.isPlayer1 })
   }
 
   startGame() { // start the game and also reset scores if we're resetting from previous game
-    this.setState({
+    setTimeout(() => this.setState({
       showOptions: true,
       player1score: 0,
       player2score: 0,
-      gameOver: false
-    })
+      gameOver: false,
+      notification: false
+    }), 3000)
   }
 
   makeSelection(choice) { //hide selection menu and send player's selection to server
@@ -105,7 +120,6 @@ export default class App extends React.Component {
       this.setState({
         winner: winnerName,
         revealWinner: true,
-        displayThumbs: true,
         player1score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
@@ -117,7 +131,6 @@ export default class App extends React.Component {
       this.setState({
         winner: winnerName,
         revealWinner: true,
-        displayThumbs: true,
         player2score: newScore,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
@@ -126,7 +139,6 @@ export default class App extends React.Component {
       this.setState({
         winner: 'tie',
         revealWinner: true,
-        displayThumbs: true,
         player1choice: data.player1choice,
         player2choice: data.player2choice,
       }, () => setTimeout(this.nextRound, 3000))
@@ -140,15 +152,18 @@ export default class App extends React.Component {
         revealWinner: false
       })
     } else {
-      alert('next round starting!')
       this.setState({
         revealWinner: false,
-        showOptions: true
+        showOptions: true,
       })
     }
   }
 
   playAgain() { // play again
+    this.setState({
+      notification: true,
+      notificationText: 'Get ready to play again!'
+    })
     socket.emit('resetGame', { room: this.state.room })
   }
 
@@ -167,18 +182,24 @@ export default class App extends React.Component {
       player1choice: '',
       player2choice: '',
       revealWinner: false,
-      displayThumbs: false,
       winner: '',
       gameOver: false
     })
   }
   showError(data) { //display any error messages
-    alert(data.message)
-    return;
+    this.setState({
+      error: true,
+      errorMessage: data.message
+    })
+  }
+
+  clearError() { //user closes error message
+    this.setState({
+      error: false,
+    })
   }
 
   componentDidMount() {
-
     socket.on('player1', this.joinRoomPlayer1)
     socket.on('player2', this.joinRoomPlayer2)
     socket.on('player2joined', this.player2joined)
@@ -193,9 +214,18 @@ export default class App extends React.Component {
     return (
       <>
         <Topbar />
+
+        {this.state.error ?
+          <Error
+            errorMessage={this.state.errorMessage}
+            clearError={this.clearError.bind(this)}
+          />
+          : null}
+
         {!this.state.isPlaying ?
           <Lobby
-            startplayer1={this.beginGamePlayer1.bind(this)} startplayer2={this.beginGamePlayer2.bind(this)}
+            startplayer1={this.beginGamePlayer1.bind(this)}
+            startplayer2={this.beginGamePlayer2.bind(this)}
           />
           : <Board
             name={this.state.name}
@@ -210,10 +240,11 @@ export default class App extends React.Component {
             player2choice={this.state.player2choice}
             winner={this.state.winner}
             displayResult={this.state.revealWinner}
-            showThumbs={this.state.displayThumbs}
             gameOver={this.state.gameOver}
             playAgain={this.playAgain.bind(this)}
             exitGame={this.exitGame.bind(this)}
+            notification={this.state.notification}
+            notificationText={this.state.notificationText}
           />}
       </>
 

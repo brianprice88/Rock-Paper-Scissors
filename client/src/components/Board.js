@@ -1,6 +1,6 @@
 import React from 'react';
 import Score from './static/Score.js';
-import WaitingforOpponent from './static/Waiting';
+import Notification from './static/Notification';
 import GameOver from './static/GameOver';
 import Results from './static/Results';
 
@@ -16,7 +16,7 @@ export default function Board(props) {
                 opponent={props.opponent}
             />
 
-            {props.opponent ? null : <WaitingforOpponent />}
+            {props.notification ? <Notification text={props.notificationText} /> : null}
 
             {props.showOptions ?
                 <div className="btn-group">
@@ -33,7 +33,6 @@ export default function Board(props) {
                     player1choice={props.player1choice}
                     player2choice={props.player2choice}
                     winner={props.winner}
-                    showThumbs={props.showThumbs}
                 />
                 :
                 null
@@ -46,7 +45,7 @@ export default function Board(props) {
                     exitGame={props.exitGame}
                 />
                 :
-                <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
+            <button className="btn btn-warning" onClick={props.exitGame}>Leave game</button>
             }
 
         </>

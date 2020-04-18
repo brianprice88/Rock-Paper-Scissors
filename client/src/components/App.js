@@ -61,41 +61,46 @@ export default class App extends React.Component {
   }
 
   joinRoomPlayer2(data) { //player 2 joins room
-    alert(`Room ${data.room} entered successfully!  The game is starting.`)
     this.setState({
       isPlaying: true,
       name: data.name,
       room: data.room,
       toWin: data.toWin,
       isPlayer1: false,
-      opponent: data.opponent
+      opponent: data.opponent,
+      error: false,
+      notification: true,
+      notificationText: `Room ${data.room} entered successfully!  The game is starting.`
     })
   }
 
   player2joined(data) { //player1 is informed that player 2 has joined
-    alert(`${data.name} joined the room!`)
     this.setState({
-      opponent: data.name
+      opponent: data.name,
+      notification: true,
+      notificationText: `${data.name} joined the room!  The game is starting.`
     })
   }
 
   opponentLeft() { //player finds out other player quit
-    alert('Your opponent left!')
     this.setState({
       opponent: null,
       showOptions: false,
       player1score: 0,
       player2score: 0,
+      notification: true,
+      notificationText: 'Your opponent left!'
     })
   }
 
   startGame() { // start the game and also reset scores if we're resetting from previous game
-    this.setState({
+    setTimeout(() => this.setState({
       showOptions: true,
       player1score: 0,
       player2score: 0,
-      gameOver: false
-    })
+      gameOver: false,
+      notification: false
+    }), 3000)
   }
 
   makeSelection(choice) { //hide selection menu and send player's selection to server
@@ -142,7 +147,6 @@ export default class App extends React.Component {
         revealWinner: false
       })
     } else {
-      alert('next round starting!')
       this.setState({
         revealWinner: false,
         showOptions: true,
@@ -151,6 +155,10 @@ export default class App extends React.Component {
   }
 
   playAgain() { // play again
+    this.setState({
+      notification: true,
+      notificationText: 'Get ready to play again!'
+    })
     socket.emit('resetGame', { room: this.state.room })
   }
 
@@ -180,7 +188,7 @@ export default class App extends React.Component {
     })
   }
 
-  clearError() {
+  clearError() { //user closes error message
     this.setState({
       error: false,
     })

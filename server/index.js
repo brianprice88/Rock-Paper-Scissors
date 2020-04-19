@@ -8,11 +8,10 @@ const io = require('socket.io')(server);
 const port = process.env.PORT || 3001;
 
 if (process.env.NODE_ENV === 'production') {
-    app.get('*', (req, res) => res.send('hello world'))
-    // app.use(express.static(path.join(__dirname, '../client/build')));
-    // app.get('*', function (req, res) {
-    //     res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
-    // })
+    app.use(express.static(path.join(__dirname, '../client/build')));
+    app.get('*', function (req, res) {
+        res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
+    })
 }
 
 var rooms = {};

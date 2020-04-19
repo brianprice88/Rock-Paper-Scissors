@@ -4,7 +4,7 @@
   "description": "Rock Paper Scissors two player game",
   "main": "./server/index.js",
   "scripts": {
-    "server": "nodemon ./server/index.js",
+    "start": "nodemon ./server/index.js",
     "client": "cd ./client && npm run start",
     "app": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "compile": "cd ./client && npm run build",

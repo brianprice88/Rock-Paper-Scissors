@@ -4,7 +4,8 @@ import Topbar from './static/Topbar.js';
 import Error from './static/Error.js';
 import Lobby from './Lobby.js';
 import Board from './Board.js';
-const socket = socketIOClient("http://localhost:3001")
+const socket = socketIOClient('https://rock-paper-scissors-brianprice.herokuapp.com/')
+// const socket = socketIOClient("http://localhost:3001")
 
 export default class App extends React.Component {
   constructor(props) {

@@ -1,14 +1,16 @@
+const express = require('express');
 const utils = require('./utils.js')
-const app = require('express')();
+const path = require('path')
+const app = express();
 
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const port = process.env.PORT || 3001;
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(_dirname, 'client/build')));
+    app.use(express.static(path.join(__dirname, '../client/build')));
     app.get('*', function (req, res) {
-        res.sendFile(path.join(_dirname, 'client/build', 'index.html'))
+        res.sendFile(path.join(__dirname, '../client/build', 'index.html'))
     })
 }
 

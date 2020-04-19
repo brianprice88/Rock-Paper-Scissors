@@ -6,7 +6,10 @@
   "scripts": {
     "server": "nodemon ./server/index.js",
     "client": "cd ./client && npm run start",
-    "app": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\""
+    "app": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "compile": "cd ./client && npm run build",
+    "server-production": "env NODE_ENV=production npm run server",
+    "deploy": "concurrently --kill-others-on-fail \"npm run compile\" \"npm run server-production\""
   },
   "repository": {
     "type": "git",
@@ -21,9 +24,7 @@
   "homepage": "https://github.com/brianprice88/Rock-Paper-Scissors#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "socket.io": "^2.3.0"
-  },
-  "devDependencies": {
+    "socket.io": "^2.3.0",
     "concurrently": "^5.1.0",
     "nodemon": "^2.0.3"
   }

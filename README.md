@@ -8,3 +8,9 @@ clone this repo and run 'NPM INSTALL' to install dependencies
 run 'NPM run app' to launch the React client server and the Express server concurrently
 
 navigate to localhost:3000 to play
+
+TO LAUNCH THE APP IN PRODUCTION MODE:
+
+run 'NPM run deploy'
+
+navigate to localhost:3001 to play

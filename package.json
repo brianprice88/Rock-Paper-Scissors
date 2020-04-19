@@ -5,7 +5,11 @@
   "main": "./server/index.js",
   "scripts": {
     "start": "nodemon ./server/index.js",
-    "heroku-postbuild": "cd client && npm install --only=dev && npm install && npm run build"
+    "client": "cd ./client && npm run start",
+    "app": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "compile": "cd ./client && npm run build",
+    "server-production": "env NODE_ENV=production npm run server",
+    "deploy": "concurrently --kill-others-on-fail \"npm run compile\" \"npm run server-production\""
   },
   "repository": {
     "type": "git",

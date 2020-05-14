@@ -44,7 +44,7 @@ export default class Lobby extends React.Component {
                         <div className='col'>
                             <h1 className='titles'>Rock</h1>
                         </div>
-                        <div className={`row ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
+                        <div className={`col ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
                             <images.rightRock />
                         </div>
                     </div>
@@ -56,7 +56,7 @@ export default class Lobby extends React.Component {
                         <div className='col'>
                             <h1 className='titles'>Paper</h1>
                         </div>
-                        <div className={`row ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
+                        <div className={`col ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
                             <images.rightPaper />
                         </div>
                     </div>
@@ -68,7 +68,7 @@ export default class Lobby extends React.Component {
                         <div className='col'>
                             <h1 className='titles'>Scissors</h1>
                         </div>
-                        <div className={`row ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
+                        <div className={`col ${this.state.visible ? "righthandlobby" : "righthandlobbyinvisible"}`}>
                             <images.rightScissors />
                         </div>
                     </div>

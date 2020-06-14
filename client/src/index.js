@@ -1,7 +1,6 @@
 import React, {Suspense} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './components/App';
 import * as serviceWorker from './serviceWorker';
 const App = React.lazy(() => import('./components/App'))
 

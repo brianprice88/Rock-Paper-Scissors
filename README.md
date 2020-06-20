@@ -3,16 +3,22 @@ Rock Paper Scissors built from React (with Create React App) and Socket.IO, in w
 
 TO LAUNCH THE APP IN DEVELOPMENT MODE:
 
-clone this repo and run 'NPM INSTALL' to install dependencies
+* clone this repo and run 'NPM INSTALL' to install dependencies
 
-'NPM run app', then navigate to localhost:3000 to play
+* run 'NPM run app'
+
+* navigate to localhost:3000 to play
 
 TO LAUNCH THE APP IN PRODUCTION MODE:
 
-clone this repo and run 'NPM INSTALL' to install dependencies
+* clone this repo and run 'NPM INSTALL' to install dependencies
 
-'NPM run deploy', then navigate to localhost:3001 to play
+* run 'NPM run deploy'
+
+* navigate to localhost:3001 to play
 
 TO PLAY THE GAME ONLINE:
 
-https://rock-paper-scissors-brianprice.herokuapp.com/
+visit https://rock-paper-scissors-brianprice.herokuapp.com/
+
+![Rock Paper Scissors](./Rock-Paper-Scissors.png)

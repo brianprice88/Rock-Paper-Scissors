@@ -1,11 +1,21 @@
 @keyframes handShake {
-  0%,100% { transform: rotate(10deg); }
-  50% { transform: rotate(-10deg); }
+  0%,
+  100% {
+    transform: rotate(10deg);
+  }
+  50% {
+    transform: rotate(-10deg);
+  }
 }
 
 @keyframes handShake2 {
-  0%,100% { transform: rotateY(180deg) rotate(10deg); }
-  50% { transform: rotateY(180deg) rotate(-10deg); }
+  0%,
+  100% {
+    transform: rotateY(180deg) rotate(10deg);
+  }
+  50% {
+    transform: rotateY(180deg) rotate(-10deg);
+  }
 }
 
 .hand {
@@ -18,10 +28,10 @@
 }
 
 #right-hand {
-    transform: rotateY(180deg);
-    /* animation: handShake2 2s infinite; */
-    position: relative;
-  }
+  transform: rotateY(180deg);
+  /* animation: handShake2 2s infinite; */
+  position: relative;
+}
 
 .hand > div {
   position: absolute;
@@ -67,44 +77,112 @@ div.arm {
   border-bottom: 2px solid black;
 }
 
-.rockFinger-1 { top: 50px; --dif: 0px; }
-.rockFinger-2 { top: 78px; left: 84px; --dif: 4px; }
-.rockFinger-3 { top: 106px; --dif: 0px; }
-.rockFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }
+.rockFinger-1 {
+  top: 50px;
+  --dif: 0px;
+}
+.rockFinger-2 {
+  top: 78px;
+  left: 84px;
+  --dif: 4px;
+}
+.rockFinger-3 {
+  top: 106px;
+  --dif: 0px;
+}
+.rockFinger-4 {
+  top: 134px;
+  height: 26px;
+  left: 76px;
+  --dif: -8px;
+}
 
-.paperFinger-1 { top: 50px; --dif: 0px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
-.paperFinger-2 { top: 78px; left: 84px; --dif: 4px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
-.paperFinger-3 { top: 106px; --dif: 0px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0; }
-.paperFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; left: 124px; left: calc(124px + var(--dif)); width: 80px; border-left: 0; border-radius: 0 20px 20px 0;}
+.paperFinger-1 {
+  top: 50px;
+  --dif: 0px;
+  left: 124px;
+  left: calc(124px + var(--dif));
+  width: 80px;
+  border-left: 0;
+  border-radius: 0 20px 20px 0;
+}
+.paperFinger-2 {
+  top: 78px;
+  left: 84px;
+  --dif: 4px;
+  left: 124px;
+  left: calc(124px + var(--dif));
+  width: 80px;
+  border-left: 0;
+  border-radius: 0 20px 20px 0;
+}
+.paperFinger-3 {
+  top: 106px;
+  --dif: 0px;
+  left: 124px;
+  left: calc(124px + var(--dif));
+  width: 80px;
+  border-left: 0;
+  border-radius: 0 20px 20px 0;
+}
+.paperFinger-4 {
+  top: 134px;
+  height: 26px;
+  left: 76px;
+  --dif: -8px;
+  left: 124px;
+  left: calc(124px + var(--dif));
+  width: 80px;
+  border-left: 0;
+  border-radius: 0 20px 20px 0;
+}
 
-.scissorsFinger-1 { top: 50px; --dif: 0px; width: 130px; transform:rotate(-5deg);}
-.scissorsFinger-2 { top: 78px; left: 84px; --dif: 4px; width: 130px; transform:rotate(5deg);}
-.scissorsFinger-3 { top: 106px; --dif: 0px; }
-.scissorsFinger-4 { top: 134px; height: 26px; left: 76px; --dif: -8px; }
-
+.scissorsFinger-1 {
+  top: 50px;
+  --dif: 0px;
+  width: 130px;
+  transform: rotate(-5deg);
+}
+.scissorsFinger-2 {
+  top: 78px;
+  left: 84px;
+  --dif: 4px;
+  width: 130px;
+  transform: rotate(5deg);
+}
+.scissorsFinger-3 {
+  top: 106px;
+  --dif: 0px;
+}
+.scissorsFinger-4 {
+  top: 134px;
+  height: 26px;
+  left: 76px;
+  --dif: -8px;
+}
 
 .lefthandlobby {
-float: left;
-opacity: 1;
-transform: translateX(0%) scale(1);
-transition: all .75s;
+  float: left;
+  opacity: 1;
+  transform: translateX(0%) scale(1);
+  transition: all 0.75s;
 }
 
 .righthandlobby {
- float: right ;
- opacity: 1;
- transform: translateX(0%) scale(1);
- transition: all .75s;
+  float: right;
+  opacity: 1;
+  transform: translateX(0%) scale(1);
+  transition: all 0.75s;
 }
 
 .lefthandlobbyinvisible {
   transform: translateX(-30%) scale(0.95);
   opacity: 0;
-  transition: all .75s;
+  transition: all 0.75s;
 }
 
 .righthandlobbyinvisible {
   transform: translateX(30%) scale(0.95);
   opacity: 0;
-  transition: all .75s;
+  transition: all 0.75s;
 }

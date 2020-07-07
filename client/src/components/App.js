@@ -1,35 +1,37 @@
-import React from 'react';
+import React from "react";
 import socketIOClient from "socket.io-client";
-import Topbar from './static/Topbar.js';
-import Error from './static/Error.js';
-import Lobby from './Lobby.js';
-import Board from './Board.js';
-const socket = socketIOClient("http://localhost:3001")
-// const socket = socketIOClient('https://rock-paper-scissors-brianprice.herokuapp.com/')
+import Topbar from "./static/Topbar.js";
+import Error from "./static/Error.js";
+import Lobby from "./Lobby.js";
+import Board from "./Board.js";
+// const socket = socketIOClient("http://localhost:3001")
+const socket = socketIOClient(
+  "https://rock-paper-scissors-brianprice.herokuapp.com/"
+);
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       isPlaying: false,
-      name: '',
-      room: '',
+      name: "",
+      room: "",
       isPlayer1: false,
       toWin: 1,
       player1score: 0,
       player2score: 0,
-      opponent: '',
+      opponent: "",
       showOptions: false,
-      player1choice: '',
-      player2choice: '',
+      player1choice: "",
+      player2choice: "",
       revealWinner: false,
-      winner: '',
+      winner: "",
       gameOver: false,
       notification: false,
-      notificationText: '',
+      notificationText: "",
       error: false,
-      errorMessage: ''
-    }
+      errorMessage: "",
+    };
     this.joinRoomPlayer1 = this.joinRoomPlayer1.bind(this);
     this.joinRoomPlayer2 = this.joinRoomPlayer2.bind(this);
     this.player2joined = this.player2joined.bind(this);
@@ -40,16 +42,19 @@ export default class App extends React.Component {
     this.showError = this.showError.bind(this);
   }
 
-  beginGamePlayer1(name, toWin, room) { // player 1 wants to create a room
-    socket.emit('createGame', { name, toWin, room })
+  beginGamePlayer1(name, toWin, room) {
+    // player 1 wants to create a room
+    socket.emit("createGame", { name, toWin, room });
   }
 
-  beginGamePlayer2(name, room) { // player 2 wants to join a room
-    this.setState({ showOptions: false })
-    socket.emit('joinGame', { name, room })
+  beginGamePlayer2(name, room) {
+    // player 2 wants to join a room
+    this.setState({ showOptions: false });
+    socket.emit("joinGame", { name, room });
   }
 
-  joinRoomPlayer1(data) { //player 1 creates and joins room
+  joinRoomPlayer1(data) {
+    //player 1 creates and joins room
     this.setState({
       isPlaying: true,
       name: data.name,
@@ -60,11 +65,12 @@ export default class App extends React.Component {
       isPlayer1: true,
       error: false,
       notification: true,
-      notificationText: `Room ${data.room} successfully created.  Please notify other player to join.`
-    })
+      notificationText: `Room ${data.room} successfully created.  Please notify other player to join.`,
+    });
   }
 
-  joinRoomPlayer2(data) { //player 2 joins room
+  joinRoomPlayer2(data) {
+    //player 2 joins room
     this.setState({
       isPlaying: true,
       name: data.name,
@@ -76,140 +82,179 @@ export default class App extends React.Component {
       opponent: data.opponent,
       error: false,
       notification: true,
-      notificationText: `Room ${data.room} entered successfully!  The game is starting.`
-    })
+      notificationText: `Room ${data.room} entered successfully!  The game is starting.`,
+    });
   }
 
-  player2joined(data) { //player1 is informed that player 2 has joined
+  player2joined(data) {
+    //player1 is informed that player 2 has joined
     this.setState({
       opponent: data.name,
       notification: true,
-      notificationText: `${data.name} joined the room!  The game is starting.`
-    })
+      notificationText: `${data.name} joined the room!  The game is starting.`,
+    });
   }
 
-  opponentLeft() { //player finds out other player quit
-    var opponent = this.state.opponent
+  opponentLeft() {
+    //player finds out other player quit
+    var opponent = this.state.opponent;
     this.setState({
       isPlaying: false,
       showOptions: false,
       error: true,
-      errorMessage: `${opponent} left.  Game over.`
-    })
-    socket.emit('leaveRoom', { room: this.state.room, player1: this.state.isPlayer1 })
+      errorMessage: `${opponent} left.  Game over.`,
+    });
+    socket.emit("leaveRoom", {
+      room: this.state.room,
+      player1: this.state.isPlayer1,
+    });
   }
 
-  startGame() { // start the game and also reset scores if we're resetting from previous game
-    setTimeout(() => this.setState({
-      showOptions: true,
-      player1score: 0,
-      player2score: 0,
-      gameOver: false,
-      notification: false
-    }), 3000)
+  startGame() {
+    // start the game and also reset scores if we're resetting from previous game
+    setTimeout(
+      () =>
+        this.setState({
+          showOptions: true,
+          player1score: 0,
+          player2score: 0,
+          gameOver: false,
+          notification: false,
+        }),
+      3000
+    );
   }
 
-  makeSelection(choice) { //hide selection menu and send player's selection to server
-    this.setState({ showOptions: false })
-    socket.emit('playerChoice', { name: this.state.name, room: this.state.room, choice })
+  makeSelection(choice) {
+    //hide selection menu and send player's selection to server
+    this.setState({ showOptions: false });
+    socket.emit("playerChoice", {
+      name: this.state.name,
+      room: this.state.room,
+      choice,
+    });
   }
 
-  displayResult(data) { //show round result for a few seconds, then move to next round
-    if (data.winner === 'player1') {
-      let newScore = this.state.player1score + 1
-      let winnerName = this.state.isPlayer1 ? this.state.name : this.state.opponent
-      this.setState({
-        winner: winnerName,
-        revealWinner: true,
-        player1score: newScore,
-        player1choice: data.player1choice,
-        player2choice: data.player2choice,
-      }, () => setTimeout(this.nextRound, 3000))
+  displayResult(data) {
+    //show round result for a few seconds, then move to next round
+    if (data.winner === "player1") {
+      let newScore = this.state.player1score + 1;
+      let winnerName = this.state.isPlayer1
+        ? this.state.name
+        : this.state.opponent;
+      this.setState(
+        {
+          winner: winnerName,
+          revealWinner: true,
+          player1score: newScore,
+          player1choice: data.player1choice,
+          player2choice: data.player2choice,
+        },
+        () => setTimeout(this.nextRound, 3000)
+      );
+    } else if (data.winner === "player2") {
+      let newScore = this.state.player2score + 1;
+      let winnerName = !this.state.isPlayer1
+        ? this.state.name
+        : this.state.opponent;
+      this.setState(
+        {
+          winner: winnerName,
+          revealWinner: true,
+          player2score: newScore,
+          player1choice: data.player1choice,
+          player2choice: data.player2choice,
+        },
+        () => setTimeout(this.nextRound, 3000)
+      );
+    } else if (data.winner === "tie") {
+      this.setState(
+        {
+          winner: "tie",
+          revealWinner: true,
+          player1choice: data.player1choice,
+          player2choice: data.player2choice,
+        },
+        () => setTimeout(this.nextRound, 3000)
+      );
     }
-    else if (data.winner === 'player2') {
-      let newScore = this.state.player2score + 1
-      let winnerName = !this.state.isPlayer1 ? this.state.name : this.state.opponent
-      this.setState({
-        winner: winnerName,
-        revealWinner: true,
-        player2score: newScore,
-        player1choice: data.player1choice,
-        player2choice: data.player2choice,
-      }, () => setTimeout(this.nextRound, 3000))
-    } else if (data.winner === 'tie') {
-      this.setState({
-        winner: 'tie',
-        revealWinner: true,
-        player1choice: data.player1choice,
-        player2choice: data.player2choice,
-      }, () => setTimeout(this.nextRound, 3000))
-    }
   }
 
-  nextRound() {//end game if either player has won, otherwise start next round
-    if (this.state.player1score === this.state.toWin || this.state.player2score === this.state.toWin) {
+  nextRound() {
+    //end game if either player has won, otherwise start next round
+    if (
+      this.state.player1score === this.state.toWin ||
+      this.state.player2score === this.state.toWin
+    ) {
       this.setState({
         gameOver: true,
-        revealWinner: false
-      })
+        revealWinner: false,
+      });
     } else {
       this.setState({
         revealWinner: false,
         showOptions: true,
-      })
+      });
     }
   }
 
-  playAgain() { // play again
+  playAgain() {
+    // play again
     this.setState({
       notification: true,
-      notificationText: 'Get ready to play again!',
+      notificationText: "Get ready to play again!",
       gameOver: false,
-      displayResult: false
-    })
-    socket.emit('resetGame', { room: this.state.room })
+      displayResult: false,
+    });
+    socket.emit("resetGame", { room: this.state.room });
   }
 
-  exitGame() { // quit the game
-    socket.emit('leaveRoom', { room: this.state.room, player1: this.state.isPlayer1 })
+  exitGame() {
+    // quit the game
+    socket.emit("leaveRoom", {
+      room: this.state.room,
+      player1: this.state.isPlayer1,
+    });
     this.setState({
       isPlaying: false,
-      name: '',
-      room: '',
+      name: "",
+      room: "",
       isPlayer1: false,
       toWin: 1,
       player1score: 0,
       player2score: 0,
-      opponent: '',
+      opponent: "",
       showOptions: false,
-      player1choice: '',
-      player2choice: '',
+      player1choice: "",
+      player2choice: "",
       revealWinner: false,
-      winner: '',
-      gameOver: false
-    })
+      winner: "",
+      gameOver: false,
+    });
   }
-  showError(data) { //display any error messages
+  showError(data) {
+    //display any error messages
     this.setState({
       error: true,
-      errorMessage: data.message
-    })
+      errorMessage: data.message,
+    });
   }
 
-  clearError() { //user closes error message
+  clearError() {
+    //user closes error message
     this.setState({
       error: false,
-    })
+    });
   }
 
   componentDidMount() {
-    socket.on('player1', this.joinRoomPlayer1)
-    socket.on('player2', this.joinRoomPlayer2)
-    socket.on('player2joined', this.player2joined)
-    socket.on('startGame', this.startGame)
-    socket.on('showResult', this.displayResult)
-    socket.on('playerLeft', this.opponentLeft)
-    socket.on('err', this.showError)
+    socket.on("player1", this.joinRoomPlayer1);
+    socket.on("player2", this.joinRoomPlayer2);
+    socket.on("player2joined", this.player2joined);
+    socket.on("startGame", this.startGame);
+    socket.on("showResult", this.displayResult);
+    socket.on("playerLeft", this.opponentLeft);
+    socket.on("err", this.showError);
   }
 
   render() {
@@ -217,19 +262,20 @@ export default class App extends React.Component {
       <>
         <Topbar />
 
-        {this.state.error ?
+        {this.state.error ? (
           <Error
             errorMessage={this.state.errorMessage}
             clearError={this.clearError.bind(this)}
           />
-          : null}
+        ) : null}
 
-        {!this.state.isPlaying ?
+        {!this.state.isPlaying ? (
           <Lobby
             startplayer1={this.beginGamePlayer1.bind(this)}
             startplayer2={this.beginGamePlayer2.bind(this)}
           />
-          : <Board
+        ) : (
+          <Board
             name={this.state.name}
             toWin={this.state.toWin}
             isPlayer1={this.state.isPlayer1}
@@ -247,9 +293,9 @@ export default class App extends React.Component {
             exitGame={this.exitGame.bind(this)}
             notification={this.state.notification}
             notificationText={this.state.notificationText}
-          />}
+          />
+        )}
       </>
-
-    )
+    );
   }
 }
